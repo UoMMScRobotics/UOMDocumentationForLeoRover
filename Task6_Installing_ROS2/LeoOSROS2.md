@@ -1,6 +1,6 @@
 <h1 align="center"> LeoOS for ROS2 </h1>
 
-So far, you have been using LeoOS (Ubuntu 20.04) and ROS Noetic version. Now, you will burn a new OS image into the Raspberry Pi, which has Ubuntu 22.04 and ROS2 Humble. In this step, you will follow a similar process to what you did in the Software Installation step. [Sofware Installation](../App_2_Software/Software_Installation.md).
+So far, you have been using LeoOS (Ubuntu 20.04) and ROS Noetic version. Now, you will burn a new OS image into the Raspberry Pi, which has Ubuntu 22.04 and ROS2 Humble. In this step, you will follow a similar process to what you did in the Software Installation step. [Sofware Installation](../Task2_Robot_Software/LeoOS_and_Remote_Connection.md).
 
 ## Step 1: Download New LeoOS Image ##
 
@@ -18,7 +18,7 @@ Insert the SD card into the Raspberry Pi and turn on LeoRover. The power LED wil
 
 ## Step 4: Connecting LeoRover and Changing Wifi Network ID ##
 
-You can connect to the LeoRover using PuTTY by entering the robot's IP, which is the same as before. After connecting to your robot, you should change the ID of the Wi-Fi network, as you have already done before in [Sofware Installation](../App_2_Software/Software_Installation.md).
+You can connect to the LeoRover using PuTTY by entering the robot's IP, which is the same as before. After connecting to your robot, you should change the ID of the Wi-Fi network, as you have already done before in [Sofware Installation](../Task2_Robot_Software/LeoOS_and_Remote_Connection.md).
 
 ## Step 5: Connecting the Internet ##
 
