@@ -2,7 +2,8 @@
 <img title="UoM_Logo"  src="/Images/Sensor/Uom.png"  width=40% height=auto>
 This repository contains documentation for the AERO62520 Robotic Systems course at the University of Manchester. Please complete the tasks provided here in the given task order.
 
-Task 1: Important Considerations During Assembly
+[Task 1: Important Considerations During Assembly](Task1_Assembly)
+
 
 This section provides essential points to consider during the assembly process.
 Task 2: LeoOS System Installation and Configuration
