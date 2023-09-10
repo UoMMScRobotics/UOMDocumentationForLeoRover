@@ -33,7 +33,7 @@ Select your USB device
 
 Finally, click 'Flash.' It will take around 5 minutes to finish the flashing process.
 
-## Step 3 Turning On LeoRover ###
+## Step 3: Turning On LeoRover ###
 Mount the SD Card into the Raspberry Pi using the plastic tool provided in the package.
 
 <img title="SD Mount"  src="../Images/LeoOS/MountSD.png">
@@ -55,7 +55,7 @@ The green LED of the power button will start blinking, and after some time (15-2
   
 Please note that these steps are only necessary during the initial setup of your robots. Once the network IDs are customized to include group numbers, you can run all the robots simultaneously without confusion, as each will have a distinctive name.
 
-## Step 4 Connecting LeoRover ###
+## Step 4: Connecting LeoRover ###
 
 You should see a LeoRover network specific to your robot, similar to the image below.
 
@@ -80,7 +80,7 @@ Now, you should see a login screen like the image below. The login information s
 
 You should log in after entering the provided ID and password. Please note that the password will not be visible as you type.
 
-## Step 5 Changing Wifi ID ###
+## Step 5: Changing Wifi ID ###
 
 Before proceeding, you need to change the name of your robot's Wi-Fi network ID, as explained in Step 3. To do this, open the network settings by pasting the following code into the PuTTY console:
 ```
@@ -101,7 +101,7 @@ It will disconnect you from the LeoRover Wi-Fi, and the Wi-Fi name will be updat
 
 <img title="Updated Wifi Name"  src="../Images/LeoOS/WifiImage2.png"  width=60% height=auto>
 
-## Step 6 Connecting via Remote Desktop Connection ###
+## Step 6: Connecting via Remote Desktop Connection ###
 
 With an SSH connection (PuTTY), you have access to a console that allows you to modify your robot's software. Another way to connect to the Raspberry Pi is to use Remote Desktop Connection, which enables you to directly view the desktop of the Raspberry Pi instead of a console. To use Remote Desktop Connection, follow these steps:
 
