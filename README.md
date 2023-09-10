@@ -6,7 +6,8 @@ This repository contains documentation for the AERO62520 Robotic Systems course 
 
 
 This section provides essential points to consider during the assembly process.
-Task 2: LeoOS System Installation and Configuration
+[Task 2: LeoOS System Installation and Configuration](Task2_Robot_Software)
+
 
 <ol>
 <li>Install LeoOS System on the Raspberry Pi</li>
@@ -17,15 +18,17 @@ Task 2: LeoOS System Installation and Configuration
 <li>Testing ROS Installation</li>
 </ol>
 
-Task 3: ROS Workspace and Packages Creation
+[Task 3: ROS Workspace and Packages Creation](Task3_Basic_ROS)
 
 This section explains how to create a ROS workspace and packages, including a simple ROS node for moving the robot forward and backward periodically.
-Task 4: Steering LeoRover with a PS4 Controller
 
-Task 5: Following an ARTag with the Robot
+[Task 4: Steering LeoRover with a PS4 Controller](Task4_Steering_with_joystick)
 
-Task 6: Installing Ubuntu 22.04 Image and ROS2 on LeoRover
+[Task 5: Following an ARTag with the Robot](Task5_Follow_ARTag)
 
-Task 7: Installing Ubuntu 22.04 Image and ROS2 on Intel NUC
+[Task 6: Installing Ubuntu 22.04 Image and ROS2 on LeoRover](Task6_Installing_ROS2)
 
-Task 8: Using Sensors with ROS2 on Intel NUC
+[Task 7: Installing Ubuntu 22.04 Image and ROS2 on Intel NUC](Task7_Intel_NUC_Setup)
+
+[Task 8: Using Sensors with ROS2 on Intel NUC](Task8_Using_Sensors)
+
