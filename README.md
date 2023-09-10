@@ -6,6 +6,7 @@ This repository contains documentation for the AERO62520 Robotic Systems course 
 
 
 This section provides essential points to consider during the assembly process.
+
 [Task 2: LeoOS System Installation and Configuration](Task2_Robot_Software)
 
 
