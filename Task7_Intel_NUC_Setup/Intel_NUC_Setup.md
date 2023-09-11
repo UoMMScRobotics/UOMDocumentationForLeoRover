@@ -85,7 +85,7 @@ source ~/.bashrc
 ```
 ## Step 4: Connecting NUC with LeoRover ##
 
-You are provided with a Ethernet Cable to establish connection between LeoRover and Intel NUC. After connecting them, you can see topics published by LeoRover and send velocity command to robot from NUC. As you did inside LeoRover, try sending velocity commands from NUC.
+You are provided with an Ethernet cable to establish a connection between LeoRover and the Intel NUC. After connecting them, you can observe topics published by LeoRover and send velocity commands to the robot from the NUC. Just as you did inside LeoRover, try sending velocity commands from the NUC.
 
 
 
