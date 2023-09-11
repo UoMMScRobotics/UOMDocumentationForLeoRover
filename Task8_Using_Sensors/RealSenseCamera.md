@@ -28,6 +28,14 @@ rviz2 rviz
 In Rviz, change **Fixed Frame** from **map** to **camera link** and add **PointCloud2** to display:
 
 
+<img title="PC Rviz 1"  src="../Images/Sensor/rviz_add_pc.png"  width=80% height=auto>
+
+and select **/camera/depth/color/points** as the topic name:
+
+<img title="PC Rviz 2"  src="../Images/Sensor/rviz_point_cloud.png"  width=80% height=auto>
+
+
+
 
 
 
