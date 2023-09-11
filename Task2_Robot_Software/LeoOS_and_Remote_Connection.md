@@ -112,6 +112,8 @@ It will disconnect you from the LeoRover Wi-Fi, and the Wi-Fi name will be updat
 
 ## Step 6: Connecting via Remote Desktop Connection ###
 
+### Windows ###
+
 With an SSH connection (PuTTY), you have access to a console that allows you to modify your robot's software. Another way to connect to the Raspberry Pi is to use Remote Desktop Connection, which enables you to directly view the desktop of the Raspberry Pi instead of a console. To use Remote Desktop Connection, follow these steps:
 
 <img title="Remote Desktop"  src="../Images/LeoOS/RemoteDesktop.png"  width=60% height=auto>
@@ -142,8 +144,19 @@ You will notice that ROS Noetic is already installed on the robot.
 
 Now, you can navigate through the folders to explore what is installed within the LeoRover operating system.
 
+### Linux ###
 
+Run the remmina application
 
+<img title="Open Remmina"  src="../Images/LeoOS/remmina_1.png"  width=60% height=auto>
+
+Add a new remote using button on left top corner
+
+<img title="Add Remote"  src="../Images/LeoOS/remmina_2.png"  width=60% height=auto>
+
+Type the raspberry pi ip, id and password and then click connect.
+
+<img title="Connect Raspberry"  src="../Images/LeoOS/remmina_3.png"  width=60% height=auto>
 
 
 
