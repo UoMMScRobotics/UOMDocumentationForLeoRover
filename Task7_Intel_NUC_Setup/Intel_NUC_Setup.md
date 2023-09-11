@@ -83,7 +83,9 @@ echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 ```
 source ~/.bashrc
 ```
+## Step 4: Connecting NUC with LeoRover ##
 
+You are provided with a Ethernet Cable to establish connection between LeoRover and Intel NUC. After connecting them, you can see topics published by LeoRover and send velocity command to robot from NUC. As you did inside LeoRover, try sending velocity commands from NUC.
 
 
 
