@@ -13,13 +13,54 @@ After downloading, you need to follow the same steps as burning the LeoROS image
 Plug in the USB with Ubuntu 22.04 into one of the USB ports of the Intel NUC and turn it on. Since there is no operating system installed on the NUC, it will automatically recognize your USB device and start the setup process. Then, you can follow the steps provided https://ubuntu.com/tutorials/install-ubuntu-desktop#5-installation-setup
 
 ## Step 3: Installing ROS2 Humble on the NUC ##
-To install ROS2 on the NUC, please follow the instructions in the official ROS2 Humble document (https://docs.ros.org/en/humble/Installation/Alternatives/Ubuntu-Development-Setup.html) until you reach the **Environment setup** section. Additionally, you do not need to complete the **Install additional DDS implementations (optional)** step. Please precisely replicate the installation instructions."
 
+### Set Locale ###
+```
+locale  # check for UTF-8
+
+sudo apt update && sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+locale  # verify settings
+```
+### Setup Sources ###
+
+```
+sudo apt install software-properties-common
+sudo add-apt-repository universe
+```
+
+```
+sudo apt update && sudo apt install curl -y
+sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key -o /usr/share/keyrings/ros-archive-keyring.gpg
+```
+
+```
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo $UBUNTU_CODENAME) main" | sudo tee /etc/apt/sources.list.d/ros2.list > /dev/null
+```
+### Install ROS 2 packages ###
+
+```
+sudo apt update
+```
+```
+sudo apt upgrade
+```
+```
+sudo apt install ros-humble-desktop
+```
+```
+sudo apt install ros-dev-tools
+```
 
 To test your installation, please open two terminal windows and source your ROS2 workspace in both of them:
+
 ```
-. ~/ros2_humble/install/local_setup.bash
+source /opt/ros/humble/setup.bash
 ```
+
 In one of the terminals, run a data publisher node:
 ```
 ros2 run demo_nodes_cpp talker
@@ -36,7 +77,7 @@ You should see the following output:
 
 To automatically source the ROS2 workspace, you can use the following commands:
 ```
-echo "source ~/ros2_humble/install/local_setup.bash" >> ~/.bashrc
+echo "source /opt/ros/humble/setup.bash" >> ~/.bashrc
 ```
 
 ```
