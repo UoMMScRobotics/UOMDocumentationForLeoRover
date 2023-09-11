@@ -56,7 +56,7 @@ The green LED of the power button will start blinking, and after some time (15-2
 Please note that these steps are only necessary during the initial setup of your robots. Once the network IDs are customized to include group numbers, you can run all the robots simultaneously without confusion, as each will have a distinctive name.
 
 ## Step 4: Connecting LeoRover ###
-
+### Windows ###
 You should see a LeoRover network specific to your robot, similar to the image below.
 
 <img title="Wifi Leo"  src="../Images/LeoOS/WifiImage1.png"  width=40% height=auto>
@@ -79,6 +79,15 @@ Now, you should see a login screen like the image below. The login information s
 <img title="SSH Login"  src="../Images/LeoOS/LoginRasperrySSH.png"  width=70% height=auto>
 
 You should log in after entering the provided ID and password. Please note that the password will not be visible as you type.
+
+### Linux ###
+
+You have SSH client already installed on ubuntu. Open a new terminal in your computer and type:
+
+```
+ssh pi@10.0.0.1
+```
+Then, type **yes** and **password**.
 
 ## Step 5: Changing Wifi ID ###
 
