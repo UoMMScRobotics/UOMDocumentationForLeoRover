@@ -16,6 +16,10 @@ Download Etcher from https://etcher.balena.io
 
 and install it on your computer.
 
+**For Linux**
+Please select the following option to dowload
+<img title="Ethcer App Linux"  src="../Images/LeoOS/linux_etcher.png">
+
 **PuTTY** :You will use it to connect to the Raspberry Pi using your computer (SSH connection).
 
 Download PuTTY from https://www.PuTTY.org
