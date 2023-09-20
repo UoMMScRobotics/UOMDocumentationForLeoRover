@@ -37,6 +37,7 @@ and run it
 
 Download PuTTY from https://www.PuTTY.org
 and install it on your computer.
+You do not need to install PuTTY if have a linux installed computer
 
 ## Step 2: Burning LeoOS Image into an SD Card Using Etcher ###
 
