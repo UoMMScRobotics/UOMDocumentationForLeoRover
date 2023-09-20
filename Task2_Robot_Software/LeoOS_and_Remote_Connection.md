@@ -18,7 +18,20 @@ and install it on your computer.
 
 **For Linux**
 Please select the following option to dowload
+
 <img title="Ethcer App Linux"  src="../Images/LeoOS/linux_etcher.png">
+
+To run the application, first give the permission:
+
+```
+chmod +x balenaEtcher-1.18.11-x64.AppImage
+```
+
+and run it
+```
+./balenaEtcher-1.18.11-x64.AppImage
+```
+
 
 **PuTTY** :You will use it to connect to the Raspberry Pi using your computer (SSH connection).
 
