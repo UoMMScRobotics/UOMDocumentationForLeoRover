@@ -142,8 +142,11 @@ and copy following
   <node type="rviz" name="rviz_node" pkg="rviz" args="-d $(find ros_basics)/rviz/leo_rover.rviz" />
 </launch>
 ```
-now you can load your launch file by
+now you can source your workspace and load your launch file by
 
 ```
+cd
+cd ros_ws
+source devel/setup.bash
 roslaunch ros_basics robot_move.launch
 ```
