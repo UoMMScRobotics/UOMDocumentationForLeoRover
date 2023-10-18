@@ -105,7 +105,7 @@ You have SSH client already installed on ubuntu. Open a new terminal in your com
 ```
 ssh pi@10.0.0.1
 ```
-Then, type **yes** and **password**.
+Then, type **yes** and **raspberry**.
 
 ## Step 5: Changing Wifi ID ###
 
