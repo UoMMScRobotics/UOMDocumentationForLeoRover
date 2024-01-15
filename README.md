@@ -33,3 +33,8 @@ This section explains how to create a ROS workspace and packages, including a si
 
 [Task 8: Using Sensors with ROS2 on Intel NUC](Task8_Using_Sensors)
 
+[Task 9: Mapping and Navigation](Task9_Mapping_and_Navigation)
+
+[Task 10: Object Detection](Task10_Object_Detection)
+
+[Task 11: Grasping](Task8_Grasping)
