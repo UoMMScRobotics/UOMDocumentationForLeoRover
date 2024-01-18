@@ -1,13 +1,14 @@
 <h1 align="center"> Object Detection </h1>
-The [Navigation Stack](https://navigation.ros.org/) (Nav2) for ROS2 provides a ready built solution for mapping and navigation for mobile robots.
+
+There are many approaches to identifying objects for a robot to interact with.  This is largely dependent on what type of object the robot is interested in.  For example, human detection may be of benefit during path planning and navigation in dynamic environments, whereas using text recognition may be more suitable for identifying which pill bottle is correct for an elderly person with a robot assistant.
 
 ## Visual ##
 
-Typically, visual object detection relies on characteristics of an image to segment a portion of the image.  For example, the brightness or colour may be used to identify objects.  Furthermore, filters such as edge detection may be used to help segment or perform further tasks such as text recognition.  It may be beneficial to convert from RGB colour space to HSV colour space.  Many online tutorials and numerous textbooks are aavilable which discuss image processing.
+Typically, visual object detection relies on characteristics of an image to segment a portion of the image.  For example, the brightness or colour may be used to identify objects.  Furthermore, filters such as edge detection may be used to help segment or perform further tasks such as text recognition.  It may be beneficial to convert from RGB colour space to HSV colour space.  Many online tutorials and numerous textbooks are available which discuss image processing.
 
 ## OpenCV ##
 
-OpenCV is a powerful suite of tools for object recognition, with many examples and tutorials.  It is the backbone of many image processing workflows, and conveniently there are [packages available](https://github.com/ros-perception/vision_opencv) to convert ROS images messages to OpenCV images for manipulation.
+[OpenCV](https://opencv.org/) is a powerful suite of tools for object recognition, with many examples and tutorials (which you may wish to read).  It is the backbone of many image processing workflows, and conveniently there are [packages available](https://github.com/ros-perception/vision_opencv) to convert ROS images messages to OpenCV images for manipulation.  With a calibrated camera, is it even possible to find the 3D pose of a highly textured object from 2D images.
 
 ## Fiducial Markers ##
 
@@ -15,7 +16,7 @@ It is possible to make objects more recognisable by using images which are readi
 
 ## Depth ##
 
-
+Depth (either from stereo vision, lidar, RGBD etc) can be used to aid in segmentation of a scene.  For example a table top can be modelled as a plane and removed to better filter out where an object may be.  It is likely that these depth images or point clouds will need to be converted into a 3D voxel occupancy grid when being used with [MoveIt](https://moveit.ros.org/) or other existing packages.
 
 ## Machine Learning ##
 
