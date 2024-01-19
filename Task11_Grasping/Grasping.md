@@ -26,6 +26,17 @@ If you would like to generate grasps at run time, depending on your choice of en
 
 Once you have calculated your grasp, you can execute the grasp in your robot. You can use different control techniques depending on how you represent your grasp, such as pose control, position control, etc. For example [Move Group](https://ros-planning.github.io/moveit_tutorials/doc/move_group_python_interface/move_group_python_interface_tutorial.html#getting-started) in Moveit! It can be used to plan and execute the movements of your robot. There are also other control libraries and approaches you can use. Simple plans could be predefined, such as moving above the object and down to grasp the pose. You may wish to add a feedback loop to your control to account for real-world errors. This can be done using feedback from your available sensors, such as visual servoing from visual information. There are many examples available on Git Hub. 
 
+### PincherX 150 Manipulator Arm ###
+
+The documentation regarding the kinematic information, ROS/ROS2 interfaces, etc. could be found in the following link:
+
+[Arm Documentation](https://docs.trossenrobotics.com/interbotix_xsarms_docs/)
+
+The following github link includes all necessary ROS2 packages and instructions.:
+
+[Arm Github Page](https://github.com/Interbotix/interbotix_ros_manipulators)
+
+
 
 
 
