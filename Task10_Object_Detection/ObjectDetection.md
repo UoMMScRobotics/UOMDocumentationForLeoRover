@@ -2,6 +2,8 @@
 
 There are many approaches to identifying objects for a robot to interact with.  This is largely dependent on what type of object the robot is interested in.  For example, human detection may be of benefit during path planning and navigation in dynamic environments, whereas using text recognition may be more suitable for identifying which pill bottle is correct for an elderly person with a robot assistant. Lastly, it's important to identify what output results are required for your application. Different approaches give outputs such as bounding boxes around objects or segmentation masks. 
 
+**THESE ARE ONLY SUGGESTIONS OR SIGNPOSTING TO FURTHER RESOURCES, THE CHOICE OF APPROACH IS DOWN TO YOU**
+
 ## Camera Real World Considerations ##
 When using any sensor, it is important to ensure your sensors are well calibrated. For cameras, there will be instructions provided by the manufacturer on how to best calibrate your device. Examples include [realsense docs](https://dev.intelrealsense.com/docs/self-calibration-for-depth-cameras) and [Azure Kinect docs](https://learn.microsoft.com/en-us/azure/kinect-dk/use-calibration-functions).
 Also, several factors, such as lighting, reflections from objects, and shadows can affect your camera images. It may be beneficial to consider if these are important to your application and how to tackle them.
