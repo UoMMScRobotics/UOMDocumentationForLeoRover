@@ -2,6 +2,7 @@
 
 There are several considerations for grasping objects, such as End Effector Design, Grasp Generation, and Grasp Execution. Grasping generally happens in 2 steps: first, you calculate a grasp for your object and then use some control approach to execute the grasp. Depending on your application, a simple or complex approach can be used for each. Starting off with simple solutions can be beneficial to reduce complexity. Simulation software such [Gazebo](https://gazebosim.org/home) , [Coppeliasim](https://www.coppeliarobotics.com/) , or [GraspIt](https://graspit-simulator.github.io/) can be used to test your approach before testing in the real world.
 
+**THESE ARE ONLY SUGGESTIONS OR SIGNPOSTING TO FURTHER RESOURCES, THE CHOICE OF APPROACH IS DOWN TO YOU**
 
 ## End Effector Design ##
 
