@@ -144,7 +144,7 @@ First, you should investigate the relationship between buttons and axes. Then, c
 Now, launch the package that you created in the previous steps to control the LeoRover:
 
 ```
-ros launch leo_joy_example joy.launch
+roslaunch leo_joy_example joy.launch
 ```
 
 <img title="Drive Leo"  src="../Images/JoyStick/DriveLeo.png"  width=40% height=auto>
