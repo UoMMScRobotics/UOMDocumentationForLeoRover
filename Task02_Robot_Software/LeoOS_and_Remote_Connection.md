@@ -19,17 +19,15 @@ and install it on your computer.
 **For Linux**
 Please select the following option to dowload
 
-<img title="Ethcer App Linux"  src="../Images/LeoOS/linux_etcher.png">
+<img title="Download Etcher App for Linux"  src="../Images/LeoOS/LlinuxEtcher.png">
 
-To run the application, first give the permission:
+To run the application, either double click the **balena-etcher** icon (see the image below),
 
-```
-chmod +x balenaEtcher-1.18.11-x64.AppImage
-```
+<img title="Double Click balena-etcher Icon"  src="../Images/LeoOS/EtcherExecutable.png">
 
-and run it
+or run it from the terminal using
 ```
-./balenaEtcher-1.18.11-x64.AppImage
+./balena-etcher
 ```
 
 
