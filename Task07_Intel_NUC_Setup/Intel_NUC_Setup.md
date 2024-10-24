@@ -10,7 +10,11 @@ After downloading, you need to follow the same steps as burning the LeoROS image
 
 ## Step 2: Installing Ubuntu 22.04 on the NUC ##
 
-Plug in the USB with Ubuntu 22.04 into one of the USB ports of the Intel NUC and turn it on. Since there is no operating system installed on the NUC, it will automatically recognize your USB device and start the setup process. Then, you can follow the steps provided https://ubuntu.com/tutorials/install-ubuntu-desktop#5-installation-setup
+Plug in the USB with Ubuntu 22.04 into one of the USB ports of the Intel NUC and turn it on. ~~Since there is no operating system installed on the NUC, it will automatically recognize your USB device and start the setup process.~~ 
+
+During the initial power on, ensure you hold down F10.  This will bring up the bios boot menu, select the USB stick.  If you see the operating system begin to start, you have missed the window to change boot media, restart the NUC and try again.
+
+Then, you can follow the steps provided https://ubuntu.com/tutorials/install-ubuntu-desktop#5-installation-setup
 
 ## Step 3: Installing ROS2 Humble on the NUC ##
 
