@@ -38,6 +38,8 @@ source scripts/create_udev_rules.sh
 
 ```
 ## Step 4: Launching RPLidar Node and Visualizing Data with Rviz ##
+Plug the lidar into a suitable USB port via the interface block.
+
 Now, you can launch the lidar node by
 
 ```
