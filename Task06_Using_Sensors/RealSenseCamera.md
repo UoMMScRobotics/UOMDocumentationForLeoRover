@@ -4,13 +4,13 @@ This section is dedicated to the installation and usage of Realsense Camera on y
 ## Step 1: Install latest Intel® RealSense™ SDK 2.0  ##
 
 ```
-sudo apt install ros-humble-librealsense2*
+sudo apt install ros-jazzy-librealsense2*
 ```
 
 ## Step 2: Install debian package from ROS servers ##
 
 ```
-sudo apt install ros-humble-realsense2-*
+sudo apt install ros-jazzy-realsense2-*
 ```
 ## Step 3: Run Realsense Camera Node and Visualize Data ##
 Plug the Realsense RGBD camera into a **USB 3** port (blue colour plastic), using the provided USB A -> C cable.  If the Realsense is plugged into a USB 2.X port (black plastic), it will not report an error but the device will not work correctly.  If using a third party usb cable, this can cause connectivity issues if it is not of a high quality.  In general it is best to use the supplied cable.  

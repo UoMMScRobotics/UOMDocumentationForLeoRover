@@ -4,7 +4,7 @@ This section focuses on installing the LeoOS operating system on the Raspberry P
 
 ## Step 1: Installing Required Softwares ##
 
-**LeoOS** : This is the official operating system for Raspberry Pi, which includes ROS Noetic pre-installed. You will need to burn this image onto your Raspberry Pi. You can download the LeoOS image from
+**LeoOS** : This is the official operating system for Raspberry Pi, which includes ROS2 Jazzy pre-installed. You will need to burn this image onto your Raspberry Pi. You can download the LeoOS image from
 
 https://github.com/LeoRover/LeoOS/releases
 
@@ -154,7 +154,7 @@ Now, you should see the desktop of the LeoRover as shown below:
 
 <img title="Raspberry Desktop"  src="../Images/LeoOS/LeoRoverDesktop.png"  width=60% height=auto>
 
-You will notice that ROS Noetic is already installed on the robot.
+You will notice that ROS Jazzy is already installed on the robot.
 
 <img title="ROS Folders"  src="../Images/LeoOS/LeoRoverFolders.png"  width=60% height=auto>
 
@@ -173,6 +173,69 @@ Add a new remote using button on left top corner
 Type the raspberry pi ip, id and password and then click connect.
 
 <img title="Connect Raspberry"  src="../Images/LeoOS/remmina_3.png"  width=60% height=auto>
+
+Once you connect it should ask for a password:
+<img title="VNC password"  src="../Images/LeoOS/remmina_4.png"  width=60% height=auto>
+
+Now, you should be able to see the screen:
+<img title="LeoOS home"  src="../Images/LeoOS/remmina_5.png"  width=60% height=auto>
+
+
+## Step 7: Update Robot Firmware ##
+
+Check if the current leo firmware requires any updates:
+
+```
+ros2 run leo_fw update
+```
+<img title="firmware_update"  src="../Images/ROS2/firmware_update.png"  width=40% height=auto>
+
+## Step 8: Publishing and Listening ROS2 Topics ##
+
+Now you should be able to publish and listen to robot-related ROS2 topics. To list all published topics:
+
+```
+ros2 topic list
+```
+
+<img title="all_topics"  src="../Images/ROS2/topic_list.png"  width=20% height=auto>
+
+You can listen to **joint_states**:
+
+```
+ros2 topic echo /joint_states
+```
+<img title="joint_state"  src="../Images/ROS2/joint_state.png"  width=40% height=auto>
+
+or imu data **firmware/imu**:
+```
+ros2 topic echo /firmware/imu
+```
+
+<img title="imu"  src="../Images/ROS2/imu.png"  width=40% height=auto>
+
+You can also send linear and angular velocities to the robot using the **cmd_vel** topic. For example, to send a forward velocity of 1 m/s for once,
+
+```
+ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0}}"
+```
+
+<img title="send_velocity"  src="../Images/ROS2/send__velocity.png"  width=80% height=auto>
+
+Alternatively, you can send it at a certain frequency.
+
+```
+ros2 topic pub –-rate 1 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0}}"
+```
+where the rate defines the frequency, which is 1 Hz in the example.
+
+<img title="send_velocity_periodic"  src="../Images/ROS2/send__velocity_periodic.png"  width=80% height=auto>
+
+
+
+
+
+
 
 
 

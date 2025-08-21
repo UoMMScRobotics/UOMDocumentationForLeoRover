@@ -1,22 +1,22 @@
 <h1 align="center"> Steering with Joystick </h1>
 
-This section is dedicated to controlling LeoRover using a PS4 controller. In the previous section, you created a workspace and a package to move the robot using ROS topics. In this section, you will create a new package to move the robot using ROS and a joystick (PS4). After successfully completing this section, you will be able to control your robot using a PS4 controller.
+This section is dedicated to controlling LeoRover using a PS4 controller. In the previous section, you created a workspace and a package to move the robot using ROS2 topics. In this section, you will create a new package to move the robot using ROS2 and a joystick (PS4). After successfully completing this section, you will be able to control your robot using a PS4 controller.
 
 **Important Note: Please use Remote Desktop Connection instead of PuTTY, as you will need to create multiple terminal windows.**
 
 
-## Step 1: Creating ROS Workspace ##
+## Step 1: Creating ROS2 Workspace ##
 
 First, create a new package
 ```
-cd ros_ws/src
-catkin create pkg leo_joy_example --catkin-deps joy teleop_twist_joy
+cd ~/ros2_ws/src
+ros2 pkg create leo_joy_example --build-type ament_python --dependencies joy teleop_twist_joy
 ```
 
 Update workspace
 
 ```
-cd ..
+cd ~/ros2_ws
 rosdep update
 rosdep install --from-paths src -i
 ```
@@ -32,32 +32,96 @@ Create launch file
 
 ```
 cd launch
-nano joy.launch
+nano joy.launch.py
 ```
 
-Copy the following code into **joy.launch** file:
+Copy the following code into `joy.launch.py` file:
+
+```python
+from launch import LaunchDescription
+from launch_ros.actions import Node
+from ament_index_python.packages import get_package_share_directory
+import os
+
+def generate_launch_description():
+    ld = LaunchDescription()
+
+    package_name = 'leo_joy_example'
+    joy_config_path = os.path.join(
+        get_package_share_directory(package_name),
+        'config',
+        'joy_mapping.yaml'
+    )
+
+    # Joy node
+    joy_node = Node(
+        package='joy',
+        executable='joy_node',
+        name='joy_node',
+        output='screen',
+        parameters=[{
+            'dev': '/dev/input/js0',
+            'coalesce_interval': 0.02,
+            'autorepeat_rate': 30.0
+        }]
+    )
+
+    # Teleop node
+    teleop_node = Node(
+        package='teleop_twist_joy',
+        executable='teleop_node',
+        name='teleop_node',
+        output='screen',
+        parameters=[joy_config_path],
+        remappings=[('cmd_vel', 'cmd_vel')]
+    )
+
+    # Add nodes to the launch description
+    ld.add_action(joy_node)
+    ld.add_action(teleop_node)
+
+    return ld
 
 ```
-<launch>
-  <arg name="cmd_vel_topic" default="cmd_vel"/>
+press **Ctrl+O** , **Enter**, **Ctrl+X**
 
-  <node name="joy_node" pkg="joy" type="joy_node">
-    <param name="dev" value="/dev/input/js0"/>
-    <param name="coalesce_interval" value="0.02"/>
-    <param name="autorepeat_rate" value="30.0"/>
-  </node>
+Modify your `setup.py` file at `~/ros2_ws/src/leo_joy_example`:
+```python
+from setuptools import find_packages, setup
+import os
+from glob import glob
 
-  <node name="teleop_node" pkg="teleop_twist_joy" type="teleop_node">
-    <rosparam command="load" file="$(find leo_joy_example)/config/joy_mapping.yaml"/>
-    <remap from="cmd_vel" to="$(arg cmd_vel_topic)"/>
-  </node>
-</launch>
+package_name = 'leo_joy_example'
+
+setup(
+    name=package_name,
+    version='0.0.0',
+    packages=find_packages(exclude=['test']),
+    data_files=[
+        ('share/ament_index/resource_index/packages',
+            ['resource/' + package_name]),
+        ('share/' + package_name, ['package.xml']),
+        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
+    ],
+    install_requires=['setuptools'],
+    zip_safe=True,
+    maintainer='pi',
+    maintainer_email='pi@todo.todo',
+    description='TODO: Package description',
+    license='TODO: License declaration',
+    tests_require=['pytest'],
+    entry_points={
+        'console_scripts': [
+        ],
+    },
+)
+
+
 ```
-press **Ctrl+o** , **Enter**, **Ctrl+x**
 
 Create configuration folder
 ```
-cd ..
+cd ~/ros2_ws/src/leo_joy_example
 mkdir config
 ```
 
@@ -81,84 +145,86 @@ press **Ctrl+o** , **Enter**, **Ctrl+x**
 Finally, build the workspace
 
 ```
-cd
-cd ros_ws
-catkin build
+cd ~/ros2_ws
+colcon build
 ```
 
 ## Step 2: Bluetooth Connection ##
 
 To establish a Bluetooth connection between the PS4 controller and the Raspberry Pi, right-click on the Bluetooth icon in the bottom right corner and click **Devices**.
 
-<img title="Devices"  src="../Images/JoyStick/Bluetooth.png"  width=30% height=auto>
+<p align="center">
+  <img src="../Images/JoyStick/Bluetooth.png" title="Devices" width="30%"/>
+</p>
 
 Press the PS and Share buttons on the PS4 controller simultaneously until the LED starts blinking. See the buttons below:
 
-<img title="PS4 Buttons"  src="../Images/JoyStick/PS4.png"  width=40% height=auto>
+<p align="center">
+  <img src="../Images/JoyStick/PS4.png" title="PS4 Buttons" width="40%"/>
+</p>
 
-then search for the devices. It will find **Wireless Controller**.
+Then search for devices. It will find <b>Wireless Controller</b>.
 
-<img title="Find Controller"  src="../Images/JoyStick/FindController.png"  width=40% height=auto>
+<p align="center">
+  <img src="../Images/JoyStick/FindController.png" title="Find Controller" width="40%"/>
+</p>
 
-Right click on **Wireless Device** click **Pair** and **Trust** in order.
+Right click on <b>Wireless Device</b>, click <b>Pair</b> and <b>Trust</b> in order.
 
-<img title="Pair and Trust"  src="../Images/JoyStick/Pair.png"  width=40% height=auto>
+<p align="center">
+  <img src="../Images/JoyStick/Pair.png" title="Pair and Trust" width="40%"/>
+</p>
 
-Now your controller is connected to the Raspberry Pi and added as a trusted device. Now you should see the following:
+When your controller's LED stops blinking and becomes a stable colour, it is connected to the Raspberry Pi and added as a trusted device. Now you should see the following:
 
-<img title="PS4 Connected"  src="../Images/JoyStick/Connected.png"  width=40% height=auto>
+<p align="center">
+  <img src="../Images/JoyStick/Connected.png" title="PS4 Connected" width="40%"/>
+</p>
 
-## Step 3: Running ROS Nodes ##
+Disconnect the controller and reconnect it, it should push a notification to connect, once this is done, the controller LED should turn blue.
+
+## Step 3: Running ROS2 Nodes ##
 
 First, open two terminal windows and source the workspace in both terminals.
 ```
-cd ros_ws
-source devel/setup.bash
+cd ~/ros2_ws
 ```
-<img title="Terminals"  src="../Images/JoyStick/TwoTerminals.png"  width=80% height=auto>
+<p align="center">
+  <img src="../Images/JoyStick/TwoTerminals.png" alt="Terminals" width="80%"/>
+</p>
 
-Type following command in one of the terminal to run ros joystick node joy_node:
-
-```
-rosrun joy joy_node
-```
-If you see following output, your controller is disconnected from the raspberry. 
-
-<img title="Connection Error"  src="../Images/JoyStick/Failed.png"  width=40% height=auto>
-In this case, reconnect you controller by using bluetooth settings. Please note that when connecting PS4 always push **PS** and **Share** button until it blinks and click connect afterwards. The output should be as follows
-
-<img title="Succeed Connection"  src="../Images/JoyStick/Connection.png"  width=40% height=auto>
-
-Now, listen to the **/joy** topic in the second terminal.
+Type the following command in one of the terminals to run the ROS joystick node `joy_node`:
 
 ```
-rostopic echo /joy
+ros2 run joy joy_node
+```
+
+<p align="center">
+  <img src="../Images/JoyStick/Connection.png" alt="Succeed Connection" width="50%"/>
+</p>
+
+Now, listen to the **/joy** topic in the second terminal:
+
+```
+ros2 topic echo /joy
 ```
 
 You will notice that as you press buttons on your controller, data will be published via **/joy** as follows:
 
-<img title="Joy Axis"  src="../Images/JoyStick/Axis.png"  width=40% height=auto>
+<p align="center">
+  <img src="../Images/JoyStick/Axis.png" alt="Joy Axis" width="40%"/>
+</p>
 
-First, you should investigate the relationship between buttons and axes. Then, check the configuration file **joy_mapping.yaml** that you created earlier to understand the functions of the PS4 buttons.
+First, investigate the relationship between buttons and axes. Then, check the configuration file **joy_mapping.yaml** that you created earlier to understand the functions of the PS4 buttons.
 
 Now, launch the package that you created in the previous steps to control the LeoRover:
 
 ```
-roslaunch leo_joy_example joy.launch
+ros2 launch leo_joy_example joy.launch.py
 ```
 
-<img title="Drive Leo"  src="../Images/JoyStick/DriveLeo.png"  width=40% height=auto>
+<p align="center">
+  <img src="../Images/JoyStick/DriveLeo.png" alt="Drive Leo" width="40%"/>
+</p>
 
 You can open the camera broadcast on your computer to monitor your robot while driving by connecting to **10.0.0.1** via your browser.
-
-
-
-
-
-
-
-
-
-
-
-

@@ -25,16 +25,12 @@ This section explains how to create a ROS workspace and packages, including a si
 
 [Task 4: Steering LeoRover with a PS4 Controller](Task04_Steering_with_joystick)
 
-[Task 5: Following an ARTag with the Robot](Task05_Follow_ARTag)
+[Task 5: Installing Ubuntu 22.04 Image and ROS2 on Intel NUC](Task05_Intel_NUC_Setup)
 
-[Task 6: Installing Ubuntu 22.04 Image and ROS2 on LeoRover](Task06_Installing_ROS2)
+[Task 6: Using Sensors with ROS2 on Intel NUC](Task06_Using_Sensors)
 
-[Task 7: Installing Ubuntu 22.04 Image and ROS2 on Intel NUC](Task07_Intel_NUC_Setup)
+[Task 7: Mapping and Navigation](Task07_Mapping_and_Navigation)
 
-[Task 8: Using Sensors with ROS2 on Intel NUC](Task08_Using_Sensors)
+[Task 8: Object Detection](Task08_Object_Detection)
 
-[Task 9: Mapping and Navigation](Task09_Mapping_and_Navigation)
-
-[Task 10: Object Detection](Task10_Object_Detection)
-
-[Task 11: Grasping](Task11_Grasping)
+[Task 9: Grasping](Task09_Grasping)
