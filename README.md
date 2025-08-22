@@ -29,7 +29,7 @@ This section explains how to create a ROS workspace and packages, including a si
 
 [Task 6: Using Sensors with ROS2 on Intel NUC](Task06_Using_Sensors)
 
-[Task 7: Setting up teh Manipulator Arm](Task07_Manipulator_Setup)
+[Task 7: Setting up the Manipulator Arm](Task07_Manipulator_Setup)
 
 [Task 8: Mapping and Navigation](Task08_Mapping_and_Navigation)
 
