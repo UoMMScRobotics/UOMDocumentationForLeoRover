@@ -2,7 +2,8 @@
 
 This section focuses on installing the LeoOS operating system on the Raspberry Pi and connecting to the Raspberry Pi using two different methods. Once you have successfully completed the steps in this section, you will be able to access and modify the folders and settings inside the Raspberry Pi.
 
-## Step 1: Installing Required Softwares ##
+---
+<h2 align="center">Step 1: Installing Required Softwares</h2>
 
 **LeoOS** : This is the official operating system for Raspberry Pi, which includes ROS2 Jazzy pre-installed. You will need to burn this image onto your Raspberry Pi. You can download the LeoOS image from
 
@@ -19,17 +20,20 @@ and install it on your computer.
 **For Linux**
 Please select the following option to dowload
 
-<img title="Download Etcher App for Linux"  src="../Images/LeoOS/LlinuxEtcher.png">
+<p align="center">
+    <img title="Download Etcher App for Linux" src="../Images/LeoOS/LlinuxEtcher.png">
+</p>
 
 To run the application, either double click the **balena-etcher** icon (see the image below),
 
-<img title="Double Click balena-etcher Icon"  src="../Images/LeoOS/EtcherExecutable.png">
+<p align="center">
+    <img title="Double Click balena-etcher Icon" src="../Images/LeoOS/EtcherExecutable.png">
+</p>
 
 or run it from the terminal using
 ```
 ./balena-etcher
 ```
-
 
 **PuTTY** :You will use it to connect to the Raspberry Pi using your computer (SSH connection).
 
@@ -37,25 +41,37 @@ Download PuTTY from https://www.PuTTY.org
 and install it on your computer.
 You do not need to install PuTTY if have a linux installed computer.
 
-## Step 2: Burning LeoOS Image into an SD Card Using Etcher ###
+
+---
+<h2 align="center">Step 2: Burning LeoOS Image into an SD Card Using Etcher</h2>
 
 Connect the SD Card to your computer. Open Etcher, and select the LeoOS you downloaded in Step 1.
 
-<img title="Ethcer App"  src="../Images/LeoOS/OpenEtcher.png">
+<p align="center">
+    <img title="Ethcer App" src="../Images/LeoOS/OpenEtcher.png">
+</p>
 
 Select your USB device
 
-<img title="USB Device"  src="../Images/LeoOS/SelectDrive.png">
+<p align="center">
+    <img title="USB Device" src="../Images/LeoOS/SelectDrive.png">
+</p>
 
 Finally, click 'Flash.' It will take around 5 minutes to finish the flashing process.
 
-## Step 3: Turning On LeoRover ###
+
+---
+<h2 align="center">Step 3: Turning On LeoRover</h2>
 Mount the SD Card into the Raspberry Pi using the plastic tool provided in the package.
 
-<img title="SD Mount"  src="../Images/LeoOS/MountSD.png">
+<p align="center">
+    <img title="SD Mount" src="../Images/LeoOS/MountSD.png">
+</p>
 
 Turn on LeoRover by pressing the button shown in the following figure
-<img title="Power Button"  src="../Images/LeoOS/TuronON.jpg"  width=60% height=auto>
+<p align="center">
+    <img title="Power Button" src="../Images/LeoOS/TuronON.jpg" width="60%">
+</p>
 
 The green LED of the power button will start blinking, and after some time (15-20 seconds), you will be able to see the Wi-Fi network of the LeoRover.
 
@@ -68,23 +84,31 @@ The green LED of the power button will start blinking, and after some time (15-2
 <li>Change the network ID to "LeoRover-GROUPX," where X represents your group number.</li>
 <li>Following groups should then follow the same procedure for their robots.</li>
 </ol>
-  
+    
 Please note that these steps are only necessary during the initial setup of your robots. Once the network IDs are customized to include group numbers, you can run all the robots simultaneously without confusion, as each will have a distinctive name.
 
-## Step 4: Connecting LeoRover ###
+
+---
+<h2 align="center">Step 4: Connecting LeoRover</h2>
 ### Windows ###
 You should see a LeoRover network specific to your robot, similar to the image below.
 
-<img title="Wifi Leo"  src="../Images/LeoOS/WifiImage1.png"  width=40% height=auto>
+<p align="center">
+    <img title="Wifi Leo" src="../Images/LeoOS/WifiImage1.png" width="40%">
+</p>
 
 The password for all networks (for all robots) is 'password' by default. Enter the password and connect to your robot.
 
 After establishing the connection, run PuTTY, which you downloaded in Step 1. Type your robot's IP address (10.0.0.1) in the 'Host Name (or IP Address)' field and leave the other settings unchanged. Your PuTTY window should resemble the following image.
-<img title="PuTTY Window"  src="../Images/LeoOS/PuttyImage.png"  width=40% height=auto>
+<p align="center">
+    <img title="PuTTY Window" src="../Images/LeoOS/PuttyImage.png" width="40%">
+</p>
 
 Click **Open** . The following warning will be raised, click **Accept**.
 
-<img title="PuTTY Warning"  src="../Images/LeoOS/PuttySecurityAlert.png"  width=40% height=auto>
+<p align="center">
+    <img title="PuTTY Warning" src="../Images/LeoOS/PuttySecurityAlert.png" width="40%">
+</p>
 
 Now, you should see a login screen like the image below. The login information should be as follows:
 
@@ -92,7 +116,9 @@ Now, you should see a login screen like the image below. The login information s
 
 **password:** raspberry
 
-<img title="SSH Login"  src="../Images/LeoOS/LoginRasperrySSH.png"  width=70% height=auto>
+<p align="center">
+    <img title="SSH Login" src="../Images/LeoOS/LoginRasperrySSH.png" width="70%">
+</p>
 
 You should log in after entering the provided ID and password. Please note that the password will not be visible as you type.
 
@@ -105,15 +131,18 @@ ssh pi@10.0.0.1
 ```
 Then, type **yes** and **raspberry**.
 
-## Step 5: Changing Wifi ID ###
 
+---
+<h2 align="center">Step 5: Changing Wifi ID</h2>
 Before proceeding, you need to change the name of your robot's Wi-Fi network ID, as explained in Step 3. To do this, open the network settings by pasting the following code into the PuTTY console:
 ```
 sudo nano /etc/hostapd/hostapd.conf
 ```
 Change the Wi-Fi name (SSID) according to your group number. For example, the first group should name their network as 'LeoRover-GROUP1'.
 
-<img title="Changing Wifi Name"  src="../Images/LeoOS/ChangeWifiName.png"  width=60% height=auto>
+<p align="center">
+    <img title="Changing Wifi Name" src="../Images/LeoOS/ChangeWifiName.png" width="60%">
+</p>
 
 Please only change the name of the network; do not modify the password or other parameters. After renaming it correctly, press **Ctrl+o**, **Enter**, **Ctrl+x**.
 
@@ -124,23 +153,32 @@ sudo systemctl restart hostapd
 ```
 It will disconnect you from the LeoRover Wi-Fi, and the Wi-Fi name will be updated as follows:
 
-<img title="Updated Wifi Name"  src="../Images/LeoOS/WifiImage2.png"  width=60% height=auto>
+<p align="center">
+    <img title="Updated Wifi Name" src="../Images/LeoOS/WifiImage2.png" width="60%">
+</p>
 
-## Step 6: Connecting via Remote Desktop Connection ###
 
+---
+<h2 align="center">Step 6: Connecting via Remote Desktop Connection</h2>
 ### Windows ###
 
 With an SSH connection (PuTTY), you have access to a console that allows you to modify your robot's software. Another way to connect to the Raspberry Pi is to use Remote Desktop Connection, which enables you to directly view the desktop of the Raspberry Pi instead of a console. To use Remote Desktop Connection, follow these steps:
 
-<img title="Remote Desktop"  src="../Images/LeoOS/RemoteDesktop.png"  width=60% height=auto>
+<p align="center">
+    <img title="Remote Desktop" src="../Images/LeoOS/RemoteDesktop.png" width="60%">
+</p>
 
 Type your LeoRover's IP address and click 'Connect'.
 
-<img title="Remote Desktop Connection"  src="../Images/LeoOS/RemoteDesktopConnect.png"  width=60% height=auto>
+<p align="center">
+    <img title="Remote Desktop Connection" src="../Images/LeoOS/RemoteDesktopConnect.png" width="60%">
+</p>
 
 Select **Yes** for following alert
 
-<img title="Remote Desktop Warning"  src="../Images/LeoOS/RemoteDesktopAlert.png"  width=60% height=auto>
+<p align="center">
+    <img title="Remote Desktop Warning" src="../Images/LeoOS/RemoteDesktopAlert.png" width="60%">
+</p>
 
 Enter the password and id 
 
@@ -148,15 +186,21 @@ Enter the password and id
 
 **password:** raspberry
 
-<img title="Remote Desktop Login"  src="../Images/LeoOS/RemoteDesktopLogin.png"  width=60% height=auto>
+<p align="center">
+    <img title="Remote Desktop Login" src="../Images/LeoOS/RemoteDesktopLogin.png" width="60%">
+</p>
 
 Now, you should see the desktop of the LeoRover as shown below:
 
-<img title="Raspberry Desktop"  src="../Images/LeoOS/LeoRoverDesktop.png"  width=60% height=auto>
+<p align="center">
+    <img title="Raspberry Desktop" src="../Images/LeoOS/LeoRoverDesktop.png" width="60%">
+</p>
 
 You will notice that ROS Jazzy is already installed on the robot.
 
-<img title="ROS Folders"  src="../Images/LeoOS/LeoRoverFolders.png"  width=60% height=auto>
+<p align="center">
+    <img title="ROS Folders" src="../Images/LeoOS/LeoRoverFolders.png" width="60%">
+</p>
 
 Now, you can navigate through the folders to explore what is installed within the LeoRover operating system.
 
@@ -164,55 +208,74 @@ Now, you can navigate through the folders to explore what is installed within th
 
 Run the remmina application
 
-<img title="Open Remmina"  src="../Images/LeoOS/remmina_1.png"  width=60% height=auto>
+<p align="center">
+    <img title="Open Remmina" src="../Images/LeoOS/remmina_1.png" width="60%">
+</p>
 
 Add a new remote using button on left top corner
 
-<img title="Add Remote"  src="../Images/LeoOS/remmina_2.png"  width=60% height=auto>
+<p align="center">
+    <img title="Add Remote" src="../Images/LeoOS/remmina_2.png" width="60%">
+</p>
 
 Type the raspberry pi ip, id and password and then click connect.
 
-<img title="Connect Raspberry"  src="../Images/LeoOS/remmina_3.png"  width=60% height=auto>
+<p align="center">
+    <img title="Connect Raspberry" src="../Images/LeoOS/remmina_3.png" width="60%">
+</p>
 
 Once you connect it should ask for a password:
-<img title="VNC password"  src="../Images/LeoOS/remmina_4.png"  width=60% height=auto>
+<p align="center">
+    <img title="VNC password" src="../Images/LeoOS/remmina_4.png" width="60%">
+</p>
 
 Now, you should be able to see the screen:
-<img title="LeoOS home"  src="../Images/LeoOS/remmina_5.png"  width=60% height=auto>
+<p align="center">
+    <img title="LeoOS home" src="../Images/LeoOS/remmina_5.png" width="60%">
+</p>
 
 
-## Step 7: Update Robot Firmware ##
-
+---
+<h2 align="center">Step 7: Update Robot Firmware</h2>
 Check if the current leo firmware requires any updates:
 
 ```
 ros2 run leo_fw update
 ```
-<img title="firmware_update"  src="../Images/ROS2/firmware_update.png"  width=40% height=auto>
+<p align="center">
+    <img title="firmware_update" src="../Images/ROS2/firmware_update.png" width="40%">
+</p>
 
-## Step 8: Publishing and Listening ROS2 Topics ##
 
+---
+<h2 align="center">Step 8: Publishing and Listening ROS2 Topics</h2>
 Now you should be able to publish and listen to robot-related ROS2 topics. To list all published topics:
 
 ```
 ros2 topic list
 ```
 
-<img title="all_topics"  src="../Images/ROS2/topic_list.png"  width=20% height=auto>
+<p align="center">
+    <img title="all_topics" src="../Images/ROS2/topic_list.png" width="20%">
+</p>
 
 You can listen to **joint_states**:
 
 ```
 ros2 topic echo /joint_states
 ```
-<img title="joint_state"  src="../Images/ROS2/joint_state.png"  width=40% height=auto>
+<p align="center">
+    <img title="joint_state" src="../Images/ROS2/joint_state.png" width="40%">
+</p>
 
 or imu data **firmware/imu**:
 ```
 ros2 topic echo /firmware/imu
 ```
 
-<img title="imu"  src="../Images/ROS2/imu.png"  width=40% height=auto>
+<p align="center">
+    <img title="imu" src="../Images/ROS2/imu.png" width="40%">
+</p>
 
 You can also send linear and angular velocities to the robot using the **cmd_vel** topic. For example, to send a forward velocity of 1 m/s for once,
 
@@ -220,7 +283,9 @@ You can also send linear and angular velocities to the robot using the **cmd_vel
 ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0}}"
 ```
 
-<img title="send_velocity"  src="../Images/ROS2/send__velocity.png"  width=80% height=auto>
+<p align="center">
+    <img title="send_velocity" src="../Images/ROS2/send__velocity.png" width="80%">
+</p>
 
 Alternatively, you can send it at a certain frequency.
 
@@ -229,27 +294,7 @@ ros2 topic pub –-rate 1 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y:
 ```
 where the rate defines the frequency, which is 1 Hz in the example.
 
-<img title="send_velocity_periodic"  src="../Images/ROS2/send__velocity_periodic.png"  width=80% height=auto>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+<p align="center">
+    <img title="send_velocity_periodic" src="../Images/ROS2/send__velocity_periodic.png" width="80%">
+</p>
 

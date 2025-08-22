@@ -4,8 +4,8 @@ This section is dedicated to controlling LeoRover using a PS4 controller. In the
 
 **Important Note: Please use Remote Desktop Connection instead of PuTTY, as you will need to create multiple terminal windows.**
 
-
-## Step 1: Creating ROS2 Workspace ##
+---
+<h2 align="center">Step 1: Creating ROS2 Workspace</h2>
 
 First, create a new package
 ```
@@ -44,43 +44,43 @@ from ament_index_python.packages import get_package_share_directory
 import os
 
 def generate_launch_description():
-    ld = LaunchDescription()
+  ld = LaunchDescription()
 
-    package_name = 'leo_joy_example'
-    joy_config_path = os.path.join(
-        get_package_share_directory(package_name),
-        'config',
-        'joy_mapping.yaml'
-    )
+  package_name = 'leo_joy_example'
+  joy_config_path = os.path.join(
+    get_package_share_directory(package_name),
+    'config',
+    'joy_mapping.yaml'
+  )
 
-    # Joy node
-    joy_node = Node(
-        package='joy',
-        executable='joy_node',
-        name='joy_node',
-        output='screen',
-        parameters=[{
-            'dev': '/dev/input/js0',
-            'coalesce_interval': 0.02,
-            'autorepeat_rate': 30.0
-        }]
-    )
+  # Joy node
+  joy_node = Node(
+    package='joy',
+    executable='joy_node',
+    name='joy_node',
+    output='screen',
+    parameters=[{
+      'dev': '/dev/input/js0',
+      'coalesce_interval': 0.02,
+      'autorepeat_rate': 30.0
+    }]
+  )
 
-    # Teleop node
-    teleop_node = Node(
-        package='teleop_twist_joy',
-        executable='teleop_node',
-        name='teleop_node',
-        output='screen',
-        parameters=[joy_config_path],
-        remappings=[('cmd_vel', 'cmd_vel')]
-    )
+  # Teleop node
+  teleop_node = Node(
+    package='teleop_twist_joy',
+    executable='teleop_node',
+    name='teleop_node',
+    output='screen',
+    parameters=[joy_config_path],
+    remappings=[('cmd_vel', 'cmd_vel')]
+  )
 
-    # Add nodes to the launch description
-    ld.add_action(joy_node)
-    ld.add_action(teleop_node)
+  # Add nodes to the launch description
+  ld.add_action(joy_node)
+  ld.add_action(teleop_node)
 
-    return ld
+  return ld
 
 ```
 press **Ctrl+O** , **Enter**, **Ctrl+X**
@@ -94,29 +94,27 @@ from glob import glob
 package_name = 'leo_joy_example'
 
 setup(
-    name=package_name,
-    version='0.0.0',
-    packages=find_packages(exclude=['test']),
-    data_files=[
-        ('share/ament_index/resource_index/packages',
-            ['resource/' + package_name]),
-        ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
+  name=package_name,
+  version='0.0.0',
+  packages=find_packages(exclude=['test']),
+  data_files=[
+    ('share/ament_index/resource_index/packages',
+      ['resource/' + package_name]),
+    ('share/' + package_name, ['package.xml']),
+    (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
+  ],
+  install_requires=['setuptools'],
+  zip_safe=True,
+  maintainer='pi',
+  maintainer_email='pi@todo.todo',
+  description='TODO: Package description',
+  license='TODO: License declaration',
+  tests_require=['pytest'],
+  entry_points={
+    'console_scripts': [
     ],
-    install_requires=['setuptools'],
-    zip_safe=True,
-    maintainer='pi',
-    maintainer_email='pi@todo.todo',
-    description='TODO: Package description',
-    license='TODO: License declaration',
-    tests_require=['pytest'],
-    entry_points={
-        'console_scripts': [
-        ],
-    },
+  },
 )
-
-
 ```
 
 Create configuration folder
@@ -149,7 +147,8 @@ cd ~/ros2_ws
 colcon build
 ```
 
-## Step 2: Bluetooth Connection ##
+---
+<h2 align="center">Step 2: Bluetooth Connection</h2>
 
 To establish a Bluetooth connection between the PS4 controller and the Raspberry Pi, right-click on the Bluetooth icon in the bottom right corner and click **Devices**.
 
@@ -183,7 +182,8 @@ When your controller's LED stops blinking and becomes a stable colour, it is con
 
 Disconnect the controller and reconnect it, it should push a notification to connect, once this is done, the controller LED should turn blue.
 
-## Step 3: Running ROS2 Nodes ##
+---
+<h2 align="center">Step 3: Running ROS2 Nodes</h2>
 
 First, open two terminal windows and source the workspace in both terminals.
 ```
@@ -228,3 +228,4 @@ ros2 launch leo_joy_example joy.launch.py
 </p>
 
 You can open the camera broadcast on your computer to monitor your robot while driving by connecting to **10.0.0.1** via your browser.
+
