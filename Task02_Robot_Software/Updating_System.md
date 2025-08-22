@@ -44,7 +44,7 @@ press **n** and **Enter** to contuniue.
 ## Step 3: Update Robot Firmware ##
 
 ```
-rosrun leo_fw update
+ros2 run leo_fw update
 ```
 
 Select 1) LeoCore
@@ -64,14 +64,14 @@ Open a browser on your computer and enter the robot's IP address (10.0.0.1). You
 When LeoOS starts, it automatically runs the required ROS nodes. To view the list of topics published by the robot:
 
 ```
-rostopic list
+ros2 topic list
 ```
 <img title="Ros Topics"  src="../Images/LeoOS/RosTopicAfterFirmware.png"  width=40% height=auto>
 
 You should see published topics, such as those for joint states, for example:
 
 ```
-rostopic echo /joint_states
+ros2 topic echo /joint_states
 ```
 
 <img title="Joint States"  src="../Images/LeoOS/jointStatesAfterFirmware.png"  width=60% height=auto>
@@ -79,14 +79,7 @@ rostopic echo /joint_states
 You can also observe that the robot executes velocity commands published on the **/cmd_vel** topic. Before testing this, **please place the robot on the ground**. Then, send a forward velocity command using the following command:
 
 ```
-rostopic pub /cmd_vel geometry_msgs/Twist "linear:
-  x: 0.5
-  y: 0.0
-  z: 0.0
-angular:
-  x: 0.0
-  y: 0.0
-  z: 0.0"
+ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.5, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
 ```
 
 Now, you can control your robot using the browser interface or ROS topics. You can observe your robot's behavior and have fun!
