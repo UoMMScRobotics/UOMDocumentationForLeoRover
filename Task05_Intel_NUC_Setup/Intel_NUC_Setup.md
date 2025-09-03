@@ -100,5 +100,6 @@ You are provided with an Ethernet cable to establish a connection between LeoRov
 ```bash
 ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.1, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
 ```
+> [!TIP]
+> At a later stage of your project, you might want to look into setting up a hotspot service from you NUC to your laptop.
 
-**Pro Tip: At a later stage of your project, you might want to look into setting up a hotspot service from you NUC to your personal laptops.**
