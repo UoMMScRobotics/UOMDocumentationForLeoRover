@@ -237,6 +237,37 @@ Now, you should be able to see the screen:
 
 ---
 <h2 align="center">Step 7: Update Robot Firmware</h2>
+
+<h3>Configure your device as an internet gateway</h3>
+
+To update and install operating system packages, the system needs to connect to the internet.  First, open the NetworkManager Text User Interface:
+
+```
+nmtui
+```
+
+Activate a connection
+
+<img title="Activate a connection"  src="../Images/LeoOS/Internet_1.png"  width=40% height=auto>
+
+Connect to UoM_Wifi
+
+<img title="Connect to UoM_Wifi"  src="../Images/LeoOS/Internet_2.png"  width=40% height=auto>
+
+After a while, a login screen for UoM_Wifi will appear.
+
+<img title="UoM Wifi Login"  src="../Images/LeoOS/Internet_UoM_Login.png"  width=40% height=auto>
+
+Enter your student information and connect. Verify that you have an internet connection.
+
+<h3>Apply the updates</h3>
+
+Check for and install update to the packages on your system. The -y flag automatically installs without prompting for confirmation. 
+
+```
+sudo apt update && sudo apt upgrade -y
+```
+
 Check if the current leo firmware requires any updates:
 
 ```
