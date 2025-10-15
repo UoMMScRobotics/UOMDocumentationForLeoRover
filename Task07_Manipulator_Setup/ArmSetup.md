@@ -110,8 +110,8 @@ The robot arm uses standard DH parameters for kinematic modeling:
      <img src="../Images/Manipulator/Image3.jpeg" alt="Mount Manipulator 2" width="350"/>
    </p>
 
-3. **Clamp to Table:**  
-   Clamp the manipulator to the table before operation.  
+3. **Fix to Surface:**  
+   Clamp or use the suction pads, to steady the manipulator to the table before operation.  
    <p align="center">
      <img src="../Images/Manipulator/Image4.jpeg" alt="Clamp" width="350"/>
    </p>
