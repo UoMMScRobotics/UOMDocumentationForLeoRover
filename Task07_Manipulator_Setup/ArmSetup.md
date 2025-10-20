@@ -131,6 +131,9 @@ The robot arm uses standard DH parameters for kinematic modeling:
 ---
 
 ### First Boot Steps
+> [!WARNING]
+> Users are experiencing mixed success when issues connecting to the network, causes by routing issues.
+> If you are unable to ping, please the 'Set up static IPs' section as an alternative. 
 
 1. **Connect to Network:**  
    Connect the arm's Raspberry Pi to Wi-Fi or Ethernet.  
@@ -179,6 +182,92 @@ The robot arm uses standard DH parameters for kinematic modeling:
    <p align="center">
      <img src="../Images/Manipulator/image-2.png" alt="Slider Test" width="700"/>
    </p>
+
+---
+
+> [!CAUTION]
+> The section is a currently under development.
+### Set up static IPs (Alternative)
+The aim of this section is to set up the laptop/NUC with 192.168.12.1/24 as it's IP address and the Manipulator's raspberry pi with 192.168.12.2/24 as it IP address on a local network.
+
+   Physically connect your manipulator arm and intel NUC/laptop by ethernet cable
+   On both machines run:
+   ```
+   ip link
+   ```
+   On the NUC/Laptop we typically expect `enp0s31f6` and on the Manipulator's pi typically we expect `eth0`. This guide assumes this, if your devices differ, ammend as required. 
+
+**Configure static IPs**
+In Laptop/NUC terminal
+```
+sudo nano /etc/netplan/99-wired-static.yaml
+```
+> [!NOTE]
+> Context: Named 99 so doesn't override any defaults and is applied last so guarantees priority 
+   
+   Paste the below into the nano editor (note the ip address)
+   ```
+   network:
+     version: 2
+     renderer: NetworkManager
+     ethernets:
+       enp0s31f6:
+         dhcp4: false
+         addresses:
+           - 192.168.12.1/24
+   ```
+   Exit (CTRL+X) and save.
+   
+   Apply the config
+   ```
+   sudo chmod 600 /etc/netplan/99-wired-static.yaml
+   sudo netplan apply
+   ```
+   > [!NOTE]
+   > Without the chmod 600 command, netplan with throw a warning that the config is too open. On an isolated network this isn't a worry, but useful to store somewhere in your brain. chmod 600 specifies that only the owner can read and write the file, but suppresses the warning.
+   
+   Verify  
+   ```
+   ip addr show enp0s31f6
+   ```
+   
+   On the Manipulator
+   ```
+   sudo nano /etc/netplan/99-wired-static.yaml
+   ```
+  Paste the below into the nano editor (note the ip address)
+   ```
+   network:
+     version: 2
+     ethernets:
+       eth0:
+         dhcp4: false
+         addresses:
+           - 192.168.12.2/24
+
+   ```
+   Exit (CTRL+X) and save.
+   
+   Apply the config
+   ```
+   sudo chmod 600 /etc/netplan/99-wired-static.yaml
+   sudo netplan apply
+   ```
+   Verify
+   ```
+   ip addr show eth0
+   ```
+   **Check connection**
+   On NUC/Laptop ping the Pi
+   ```
+   ping -c 3 192.168.12.2
+   ```
+   On the Pi ping the NUC/Laptop
+   ```
+   ping -c 3 192.168.12.1
+   ```
+> [!CAUTION]
+> The contruction zone has ended.
 
 ---
 
