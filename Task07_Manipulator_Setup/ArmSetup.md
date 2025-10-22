@@ -322,6 +322,7 @@ chmod +x ~/start_mycobot.sh
 #### 2. Create a systemd Service File
 
 Create `/etc/systemd/system/mycobot.service`:
+`sudo nano /etc/systemd/system/mycobot.service`
 ```
 [Unit]
 Description=MyCobot ROS 2 Launch
@@ -363,6 +364,12 @@ systemctl status mycobot.service
   <img src="../Images/Manipulator/image-3.png" alt="Slider Test" width="700"/>
 </p>
 
+> [!TIP]
+> You could also add a check to the `.bashrc` script on the Manipulator's pi
+>```
+>echo "Checking MyCobot service status..."
+>systemctl is-active --quiet mycobot.service && echo "MyCobot service is running." || echo "MyCobot service is NOT running."
+>```
 ---
 ## Cloning and Building the Elephant Arm Packages
 
