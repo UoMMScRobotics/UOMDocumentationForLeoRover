@@ -183,7 +183,7 @@ The robot arm uses standard DH parameters for kinematic modeling:
    # Export and print ROS_DOMAIN_ID
    export ROS_DOMAIN_ID=YOUR_GROUP_NUMBER
    echo "ROS_DOMAIN_ID is set to $ROS_DOMAIN_ID"
-   echo "To change this set up use nano to edit ~/.bashrc"
+   echo "To change this automation, use nano to edit ~/.bashrc and the source ~/.bashrc to apply."
    ```
    Exit nano (CTRL+X) and save.
 
