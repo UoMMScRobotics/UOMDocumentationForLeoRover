@@ -362,10 +362,10 @@ Follow these steps to clone the required packages and set up your workspace:
 ### 1. Create the Workspace and Clone the Repository in your main machine (Intel NUC)
 
 ```bash
-mkdir -p ~/elephant_arm
-cd ~/elephant_arm
-git clone https://github.com/nathanshankar/elephant.git
-mv elephant src
+mkdir -p ~/elephant_arm_ws
+cd ~/elephant_arm_ws
+git clone https://github.com/UoMMScRobotics/MSc-manipulator-task.git
+mv MSc-manipulator-task src
 ```
 
 ### 2. Install Dependencies
