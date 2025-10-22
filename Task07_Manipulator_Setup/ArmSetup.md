@@ -158,23 +158,41 @@ The robot arm uses standard DH parameters for kinematic modeling:
    </p>
 
 4. **ROS2 Environment Setup:**  
-   On the arm, run:
-   ```bash
-   source /opt/ros/galactic/setup.bash
-   source colcon_ws/install/setup.bash
+   We can automate sourcing our ROS workspace by appending instructions to **the end of** the `.bashrc` script.
+
+   ```
    nano ~/.bashrc
    ```
-   Add to the end of the file (replace `YOUR_GROUP_NUMBER`):
+   Scorll down to the bottom of the file and add:
+   Ensure you replace `YOUR_GROUP_NUMBER' with an int value.
    ```bash
+   # Source ROS Galactic setup with error checking
+   if source /opt/ros/galactic/setup.bash; then
+     echo "Sourced /opt/ros/galactic/setup.bash successfully"
+   else
+     echo "Failed to source /opt/ros/galactic/setup.bash"
+   fi
+   
+   # Source your workspace setup with error checking
+   if source ~/colcon_ws/install/setup.bash; then
+     echo "Sourced ~/colcon_ws/install/setup.bash successfully"
+   else
+     echo "Failed to source ~/colcon_ws/install/setup.bash"
+   fi
+   
+   # Export and print ROS_DOMAIN_ID
    export ROS_DOMAIN_ID=YOUR_GROUP_NUMBER
+   echo "ROS_DOMAIN_ID is set to $ROS_DOMAIN_ID"
+   echo "To change this set up use nano to edit ~/.bashrc"
    ```
-   Save and exit nano (`Ctrl+O`, `Enter`, `Ctrl+X`).
+   Exit nano (CTRL+X) and save.
+
    After saving, apply the changes by running:
    ```bash
    source ~/.bashrc
    ```
-   This ensures your environment variables are set for the current session.
-5. **Test Servos:**  
+   This ensures your environment variables.
+6. **Test Servos:**  
    Launch the slider test:
    ```bash
    ros2 launch mycobot_280pi slider_control.launch.py
