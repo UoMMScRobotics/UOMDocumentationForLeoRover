@@ -194,11 +194,11 @@ The robot arm uses standard DH parameters for kinematic modeling:
    This ensures your environment variables.
 6. **Test Servos:**  
    Launch the slider test:
-   > [!WARNING]  
-   > Avoid using the `Randomize` button. This interface does not contrain the manipulator. Random joint configurations may cause the arm to attempt to move through the table or other objects.
    ```bash
    ros2 launch mycobot_280pi slider_control.launch.py
    ```
+> [!WARNING]
+> Avoid using the `Randomize` button. This interface does not contrain the manipulator. Random joint configurations may cause the arm to attempt to move through the table or other objects.
    <p align="center">
      <img src="../Images/Manipulator/image-2.png" alt="Slider Test" width="700"/>
    </p>
@@ -208,7 +208,7 @@ The robot arm uses standard DH parameters for kinematic modeling:
 > [!CAUTION]
 > The section is a currently under development.
 ### Set up static IPs (Alternative)
-The aim of this section is to set up the laptop/NUC with 192.168.12.1/24 as it's IP address and the Manipulator's raspberry pi with 192.168.12.2/24 as it IP address on a local network.
+The aim of this sectiois to set up the laptop/NUC with 192.168.12.1/24 as it's IP address and the Manipulator's raspberry pi with 192.168.12.2/24 as it IP address on a local network.
 
    Physically connect your manipulator arm and intel NUC/laptop by ethernet cable
    On both machines run:
