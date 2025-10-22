@@ -285,7 +285,13 @@ sudo nano /etc/netplan/99-wired-static.yaml
    On the Pi ping the NUC/Laptop
    ```
    ping -c 3 192.168.12.1
+   ```sensative
+   **You can now SSH**
+   On the NUC:
    ```
+   ssh er@192.168.12.2
+   ```
+   Password for the Manipulator's arm is `Elephant`, case sensative.
 > [!CAUTION]
 > The contruction zone has ended.
 
