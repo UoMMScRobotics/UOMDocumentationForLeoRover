@@ -30,9 +30,7 @@ Understanding these fundamentals is therefore essential not only for debugging a
 ---
 <h2 align="center"> The Network Stack </h2>
 
-To understand how ROS 2 (and Gazebo) communicate, it helps to look at how data actually moves through a computer. Communicationd ride on top of the TCP/IP networking stack, see table 1.
-
-Network communication on Linux follows the TCP/IP stack, see table 1. Each layer in this stack adds its own responsibilities, and problems at any layer can result in communication disruption.
+To understand how ROS 2 (and Gazebo) communicate, it helps to look at how data actually moves through a computer. Communicationd ride on top of the TCP/IP networking stack, see table 1. Each layer in this stack adds its own responsibilities, and problems at any layer can result in communication disruption.
 <div align="center">
 
 | Layer               | Example protocols & components   | Role in communication                                                    |  ROS 2/Gazebo relevance                                          |
@@ -170,9 +168,10 @@ Each ROS 2 process (DDS participant) joins the multicast group, i.e. `239.255.0.
 
 **Gazebo Transport**
 
-Gazebo Transport’s design is almost identical to DDS, see Table 3.
+Gazebo Transport’s design is almost identical to DDS.
 
 <div align="center">
+        
 | Role                    | Address                 | Ports       | Protocol   | Description                        |
 | ----------------------- | ----------------------- | ----------- | ---------- | ---------------------------------- |
 | **Discovery (send)**    | 239.255.0.7             | 10317       | UDP        | Server and GUI announce themselves |
@@ -187,7 +186,7 @@ Table 4. Gazebo Transport Summary.
 > [!TIP]
 > If the multicast packets on ports 10317/10318 are blocked by a firewall or by Docker’s virtual bridge, the GUI never sees the server which causes the “black screen” symptom.
 
-**Troubleshooting**
+
 You can inspect in action multicast behaviour directly by:
 ```
 # See which multicast groups your interfaces have joined
@@ -201,8 +200,13 @@ sudo tcpdump -n -i any udp and multicast
 ros2 multicast send &
 ros2 multicast receive
 ```
-Common causes of multicast failure in ROS 2 and Gazebo environment are outlined in Table 4.
+
+
+<h2 align="center"> Troubleshooting </h2>
+
+Common causes of multicast failure in ROS 2 and Gazebo environment are outlined in Table 5.
 <div align="center">
+        
 | Cause                         | Where it occurs    | Effect                            |
 | ----------------------------- | ------------------ | --------------------------------- |
 | Host firewall (UFW, nftables) | Operating system   | Blocks UDP multicast packets      |
@@ -218,6 +222,12 @@ Table 5. Common networking issues Summary.
 A common cause for networking issues is that UDP multicast or discovery ports are blocked by the host firewall.
 You can address this by explicitly opening the required UDP ports and multicast range using the **u**ncomplicated **f**ire**w**all (UFW).
 ```
+# Inspect current policy and rules
+sudo ufw status verbose
+sudo ufw show raw
+sudo firewall-cmd --list-all
+sudo nft list ruleset  
+
 # ROS 2 (DDS/RTPS) discovery + unicast data control ports
 # Default DDS (FastDDS) uses UDP ports 7400–7500 for discovery and data
 sudo ufw allow 7400:7500/udp
@@ -232,6 +242,8 @@ sudo ufw allow ssh
 # Permit local-site multicast groups
 # DDS and Gazebo both use 239.255.0.x addresses for discovery
 sudo ufw allow to 239.255.0.0/16 proto udp
+# (Alternative restricted rule if needed)
+# sudo ufw allow to 239.255.0.7 proto udp
 
 # ──────────────────────────────────────────────────────────────
 # Enable firewall (no-operation if already active) and verify rules
@@ -245,3 +257,5 @@ sudo ufw delete allow 10317:10318/udp
 sudo ufw delete allow to 239.255.0.0/16 proto udp
 sudo ufw delete allow ssh
 ```
+**Container Networking 🐳**
+Each Docker container runs in its own network namespace by default.
