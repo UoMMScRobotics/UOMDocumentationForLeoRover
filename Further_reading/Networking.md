@@ -107,6 +107,7 @@ Each device can support up to 65,535 ports (0–65535), and the operating system
 <p align="center">
 Table 3. Port allocation.
 </p>
+
 > [!TIP]
 > If you're trying to remote access a device using SSH and it fails or hangs. Checking SSH is enabled and that port 22 isn't blocked are key troubleshooting steps.
 > As you are troubleshooting you may find yourself using commands such as `ros2 doctor --report` and `ros2 doctor --network`.
@@ -312,6 +313,7 @@ Since both ROS 2 DDS and Gazebo Transport depend on UDP multicast for automatic 
 * [ros2 doctor Reference](https://docs.ros.org/en/jazzy/p/ros2doctor/ros2doctor.html)
 * [Docker Networking Overview](https://docs.docker.com/network/)
 * [Wireshark network protocol analyzer](https://wiki.wireshark.org/)
+
 
 
 
