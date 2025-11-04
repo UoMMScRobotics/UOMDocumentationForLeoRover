@@ -42,7 +42,6 @@ Network communication on Linux follows the TCP/IP stack, see table 1. Each layer
 | **Transport**       | UDP, TCP                         | Moves data between programs on different devices                         | ROS 2 and Gazebo primarily use UDP for low-latency messaging     |
 | **Network**         | IP (IPv4/IPv6)                   | Provides logical addressing and routing between hosts                    | IP addresses for nodes on the same machine or network            |
 | **Link / Physical** | Ethernet, Wi-Fi, virtual bridges | Moves packets across physical or virtual hardware                        | Determines actual connectivity (wired, wireless, Docker bridge)  |
-
 </div>
 <p align="center">
 Table 1. Modified TCP/IP Stack Summary.
@@ -78,6 +77,7 @@ Every packet sent through the network stack must know where it’s going and who
 An IP address identifies a specific device, network interface, or logical group on a network, see table 2. IP addresses provides the location of the device within the network and tells the routers and switches where to deliver packets (data).
 
 <div align="center">
+        
 | Type            | Typical range                 | Purpose                                    | ROS 2/Gazebo relevance                   |
 | --------------- | ----------------------------- | ------------------------------------------ | ---------------------------------------- |
 | **Loopback**    | `127.0.0.1`                   | The local machine only                     | Used when running nodes on a single host |
@@ -99,13 +99,16 @@ A port number identifies a specific service or process on that IP address.
 Each device can support up to 65,535 ports (0–65535), and the operating system uses them to deliver packets to the correct application.
 
 <div align="center">
+        
 | Range           | Name               | Typical use                    | Example                                     |
 | --------------- | ------------------ | ------------------------------ | ------------------------------------------- |
 | **0–1023**      | *Well-known ports* | Reserved for system services   | 22 (SSH), 80 (HTTP)                         |
 | **1024–49151**  | *Registered ports* | Applications and middleware    | 7400–7500 (ROS 2 DDS), 10317–10318 (Gazebo) |
 | **49152–65535** | *Ephemeral ports*  | Temporary outbound connections | Used dynamically by the OS                  |
 </div>
-
+<p align="center">
+Table 3. Port allocation.
+</p>
 > [!TIP]
 > If you're trying to remote access a device using SSH and it fails or hangs. Checking SSH is enabled and that port 22 isn't blocked are key troubleshooting steps.
 > As you are troubleshooting you may find yourself using commands such as `ros2 doctor --report` and `ros2 doctor --network`.
@@ -162,6 +165,8 @@ In short, multicast is how Gazebo and DDS participants find each other automatic
 
 DDS discovery is the process that uses multicast (and unicast) to find and connect those peers.
 Each ROS 2 process (DDS participant) joins the multicast group, i.e. `239.255.0.1:7400`. It sends a Simple Participant Discovery Protocol (SPDP) packet: *“I’m here; these are my endpoints.”*. Other participants receive it, add the sender to their discovery database, and respond via unicast UDP. Once matched, all further topic data flows directly over unicast connections.
+> [!NOTE]
+> In relation to DDS, you will come across the term Real-Time Publish-Subscribe (RTPS) protocol. RTPS is the network protocol that implements DDS communication.
 
 **Gazebo Transport**
 
@@ -176,7 +181,7 @@ Gazebo Transport’s design is almost identical to DDS, see Table 3.
 
 </div>
 <p align="center">
-Table 3. Gazebo Transport Summary.
+Table 4. Gazebo Transport Summary.
 </p>
 
 > [!TIP]
@@ -207,6 +212,36 @@ Common causes of multicast failure in ROS 2 and Gazebo environment are outlined 
 
 </div>
 <p align="center">
-Table 3. Common networking issues Summary.
+Table 5. Common networking issues Summary.
 </p>
 
+A common cause for networking issues is that UDP multicast or discovery ports are blocked by the host firewall.
+You can address this by explicitly opening the required UDP ports and multicast range using the **u**ncomplicated **f**ire**w**all (UFW).
+```
+# ROS 2 (DDS/RTPS) discovery + unicast data control ports
+# Default DDS (FastDDS) uses UDP ports 7400–7500 for discovery and data
+sudo ufw allow 7400:7500/udp
+
+# Gazebo Transport discovery (GUI ↔ server)
+# Uses UDP ports 10317–10318 for multicast discovery messages
+sudo ufw allow 10317:10318/udp
+
+# Allow secure remote access via SSH (TCP 22)
+sudo ufw allow ssh
+
+# Permit local-site multicast groups
+# DDS and Gazebo both use 239.255.0.x addresses for discovery
+sudo ufw allow to 239.255.0.0/16 proto udp
+
+# ──────────────────────────────────────────────────────────────
+# Enable firewall (no-operation if already active) and verify rules
+sudo ufw enable
+sudo ufw status verbose
+```
+If you ever want to remove this config run:
+```
+sudo ufw delete allow 7400:7500/udp
+sudo ufw delete allow 10317:10318/udp
+sudo ufw delete allow to 239.255.0.0/16 proto udp
+sudo ufw delete allow ssh
+```
