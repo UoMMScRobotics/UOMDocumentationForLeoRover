@@ -117,9 +117,12 @@ For example:
 `239.255.0.7:10317`  → Gazebo discovery multicast (outbound)
 `239.255.0.7:10318`  → Gazebo discovery listener (inbound)
 
-Even if multiple processes share the same IP, their distinct ports prevent collisions, each DDS participant or Gazebo instance binds its own sockets.
+Even if multiple processes share the same IP, their distinct ports prevent collisions at the network layer — each DDS participant or Gazebo instance binds its own sockets, so the operating system can always route packets correctly.
+> [!NOTE]
+> While network ports keep packets separate, DDS operates at a higher logical layer, matching topics by name and type. When multiple ROS 2 systems share the same network (for example, two robots on the same LAN), they may advertise identical topic names (`/cmd_vel`, `/scan`, etc.). DDS discovery will connect any matching topics within the same Domain ID, even across hosts, which can introduce cross-talk. To prevent this use [Namespaces](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Using-ROS2-Launch-For-Large-Projects.html).
 
-You can see this yourself by opening a terminal sourcing ROS and running the talker demo node
+
+You can see this yourself by opening a terminal sourcing ROS and running the talker demo node.
 ```
 ros2 run demo_nodes_cpp talker
 ```
@@ -152,6 +155,8 @@ Gazebo and ROS 2 each use UDP differently:
 
 * ROS 2 DDS: Uses UDP both for discovery and data transmission.
 * Gazebo Transport: Uses UDP multicast for discovery, then either UDP or TCP for data, depending on the message type.
+> [!NOTE]
+> In relation to DDS, you will come across Quality of Service (QoS). QoS operates above the transport layer and controls how data is delivered once participants have already discovered each other.
 
 **Mulitcasing**
 
@@ -227,6 +232,7 @@ sudo ufw status verbose
 sudo ufw show raw
 sudo firewall-cmd --list-all
 sudo nft list ruleset  
+# ──────────────────────────────────────────────────────────────
 
 # ROS 2 (DDS/RTPS) discovery + unicast data control ports
 # Default DDS (FastDDS) uses UDP ports 7400–7500 for discovery and data
@@ -239,10 +245,22 @@ sudo ufw allow 10317:10318/udp
 # Allow secure remote access via SSH (TCP 22)
 sudo ufw allow ssh
 
-# Permit local-site multicast groups
+# ──────────────────────────────────────────────────────────────
+# Broad Multicast Fix (for debugging or permissive networks)
+# Covers the entire IPv4 multicast range 224.0.0.0–239.255.255.255 (16 million addresses)
+# This ensures all multicast-based discovery traffic (DDS, Gazebo, mDNS, IGMP, etc.) can pass.
 # DDS and Gazebo both use 239.255.0.x addresses for discovery
-sudo ufw allow to 239.255.0.0/16 proto udp
-# (Alternative restricted rule if needed)
+sudo ufw allow in proto udp to 224.0.0.0/4
+sudo ufw allow in proto udp from 224.0.0.0/4
+
+# ──────────────────────────────────────────────────────────────
+# Restrictive, Production Safe approach (optional refinement)
+# Comment out the two rules above and use this narrower range once discovery works.
+# 239.255.0.0/16 = "site-local" multicast addresses only.
+# ROS 2 DDS uses 239.255.0.1 and Gazebo Transport uses 239.255.0.7.
+# This limits multicast to the local network or host.
+# sudo ufw allow to 239.255.0.0/16 proto udp
+# (Alternatively, you can go even narrower:)
 # sudo ufw allow to 239.255.0.7 proto udp
 
 # ──────────────────────────────────────────────────────────────
@@ -258,4 +276,36 @@ sudo ufw delete allow to 239.255.0.0/16 proto udp
 sudo ufw delete allow ssh
 ```
 **Container Networking 🐳**
-Each Docker container runs in its own network namespace by default.
+
+Each Docker container runs in its own network namespace by default, meaning each container behaves like its own host with separate interfaces, routing tables, and by default no multicast visibility.
+Since both ROS 2 DDS and Gazebo Transport depend on UDP multicast for automatic discovery, this isolation is one of the most common causes of issues when using containers.
+> [!CAUTION]
+> The section **Container Networking 🐳** is due to be expanded after testing.
+
+<h2 align="center"> Further Reading </h2>
+
+### ROS 2 and DDS Concepts
+* [Installation Troubleshooting](https://docs.ros.org/en/jazzy/How-To-Guides/Installation-Troubleshooting.html#enable-multicast)
+* [ROS 2 Design Rationale — ROS on DDS](https://design.ros2.org/articles/ros_on_dds.html)
+* [ROS 2 Quality of Service (QoS) Settings](https://docs.ros.org/en/jazzy/Concepts/About-Quality-of-Service-Settings.html)
+* [ROS 2 Middleware Implementations (Fast DDS, Cyclone DDS, etc.)](https://docs.ros.org/en/jazzy/Concepts/About-Different-Middleware-Vendors.html)
+* [Managing large projects in ROS 2](https://docs.ros.org/en/jazzy/Tutorials/Intermediate/Launch/Using-ROS2-Launch-For-Large-Projects.html)
+
+### DDS and RTPS Specifications
+* [OMG DDS Specification (v1.4)](https://www.omg.org/spec/DDS/1.4/)
+* [OMG DDSI-RTPS Protocol Specification (v2.5)](https://www.omg.org/spec/DDSI-RTPS/2.5/)
+* [eProsima Fast DDS Documentation](https://fast-dds.docs.eprosima.com/en/latest/)
+
+### ROS 2 Networking, Ports and Discovery
+* [ROS 2 Domain ID and UDP Port Mapping](https://docs.ros.org/en/jazzy/Concepts/About-Domain-ID.html)
+* [Gazebo Transport Networking Overview](https://gazebosim.org/docs)
+* [Examine Network Traffic](https://docs.ros.org/en/jazzy/Tutorials/Advanced/Security/Examine-Traffic.html)
+
+### Networking and Linux Tools
+* [Ubuntu Firewall (UFW) Documentation](https://help.ubuntu.com/community/UFW)
+
+### Diagnostics and Practical Guides
+* [ros2 doctor Reference](https://docs.ros.org/en/jazzy/p/ros2doctor/ros2doctor.html)
+* [Docker Networking Overview](https://docs.docker.com/network/)
+* [Wireshark network protocol analyzer](https://wiki.wireshark.org/)
+
