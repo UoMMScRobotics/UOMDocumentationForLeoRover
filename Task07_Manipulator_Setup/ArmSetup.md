@@ -277,6 +277,6 @@ Any issues with hanging when trying to SSH, or Black GUI with Gazebo please the 
 
 ### Recommended next steps
 
-The world is your oyster! You do need to figure our how you're going to do everything else such as trajectories motion planners, kinematics solvers, collision detection, etc. And how the gripper works... And also consider the bigger networking plan beyond the peer to peer network covered in this tutorial. A lot to think about! 
+The world is your oyster! You do need to figure out how you're going to do everything else such as trajectories, motion planners, kinematics solvers, collision detection, etc. Using Move it would be an option, but others are available. And how the gripper works... And also consider the bigger networking plan beyond the peer to peer network covered in this tutorial. A lot to think about! 
 
 
