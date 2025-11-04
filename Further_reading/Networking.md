@@ -268,6 +268,9 @@ sudo ufw allow in proto udp from 224.0.0.0/4
 sudo ufw enable
 sudo ufw status verbose
 ```
+> [!TIP]
+> If you have a mutli machine setup (i.e. laptop and raspberry pi) you will need to run on both devices.
+
 If you ever want to remove this config run:
 ```
 sudo ufw delete allow 7400:7500/udp
@@ -309,5 +312,6 @@ Since both ROS 2 DDS and Gazebo Transport depend on UDP multicast for automatic 
 * [ros2 doctor Reference](https://docs.ros.org/en/jazzy/p/ros2doctor/ros2doctor.html)
 * [Docker Networking Overview](https://docs.docker.com/network/)
 * [Wireshark network protocol analyzer](https://wiki.wireshark.org/)
+
 
 
