@@ -1,4 +1,4 @@
-<h1 align="center"> Understanding ROS 2 Networking and Communication </h1>
+<h1 align="center"> Understanding and Troubleshooting ROS 2 Networking and Communication </h1>
 
 <h2 align="center"> Context </h2>
 
@@ -274,6 +274,7 @@ sudo ufw delete allow 7400:7500/udp
 sudo ufw delete allow 10317:10318/udp
 sudo ufw delete allow to 239.255.0.0/16 proto udp
 sudo ufw delete allow ssh
+# You get the idea and can ammend to what you've set
 ```
 **Container Networking 🐳**
 
@@ -308,4 +309,5 @@ Since both ROS 2 DDS and Gazebo Transport depend on UDP multicast for automatic 
 * [ros2 doctor Reference](https://docs.ros.org/en/jazzy/p/ros2doctor/ros2doctor.html)
 * [Docker Networking Overview](https://docs.docker.com/network/)
 * [Wireshark network protocol analyzer](https://wiki.wireshark.org/)
+
 
