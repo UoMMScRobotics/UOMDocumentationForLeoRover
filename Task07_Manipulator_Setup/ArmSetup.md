@@ -13,7 +13,8 @@
 6. [Setup Guide](#setup-guide)
    - [Unboxing & Assembly](#unboxing--assembly)
    - [First Boot Steps](#first-boot-steps)
-
+7. [Troubleshooting](#troubleshooting)
+8. [Recommended next steps](#recommended-next-steps)
 
 ---
 
@@ -265,15 +266,17 @@ ssh elephant@10.3.14.59
 The password being `trunk`.
 Any issues with SSH please see troubleshooting.
 
-**Troubleshooting**
+### Troubleshooting
 
 Any issues with `known_hosts` try:
 ```
 ssh-keygen -R 10.3.14.59
 ```
+
 Any issues with hanging when trying to SSH, or Black GUI with Gazebo please the [Troubleshooting ROS 2 Networking and Communication Guide](https://github.com/UoMMScRobotics/UOMDocumentationForLeoRover/blob/main/Further_reading/Networking.md). 
 
-**Recommended next steps**
+### Recommended next steps
+
 The world is your oyster! You do need to figure our how you're going to do everything else such as trajectories motion planners, kinematics solvers, collision detection, etc. And how the gripper works... And also consider the bigger networking plan beyond the peer to peer network covered in this tutorial. A lot to think about! 
 
 
