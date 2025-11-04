@@ -1,5 +1,9 @@
 # myCobot 280 Pi Documentation
 
+> [!CAUTION]
+> If you are looking for the first iteration for this documentation that uses Galatic and Humble please '[click here](https://github.com/UoMMScRobotics/MSc-manipulator-task)' to be redirected.
+>
+
 ## Table of Contents
 1. [Key Specifications](#key-specifications)
 2. [Performance & Structural Parameters](#performance--structural-parameters)
@@ -9,18 +13,7 @@
 6. [Setup Guide](#setup-guide)
    - [Unboxing & Assembly](#unboxing--assembly)
    - [First Boot Steps](#first-boot-steps)
-   - [Setting up a Service for Consequent Boots](#setting-up-a-service-for-consequent-boots)
-     - [Create a Headless Launch Script](#1-create-a-headless-launch-script)
-     - [Create a systemd Service File](#2-create-a-systemd-service-file)
-     - [Enable and Start the Service](#3-enable-and-start-the-service)
-     - [Reboot and Test](#4-reboot-and-test)
-7. [Cloning and Building the Elephant Arm Packages](#cloning-and-building-the-elephant-arm-packages)
-   - [Create the Workspace and Clone the Repository](#1-create-the-workspace-and-clone-the-repository-in-your-main-machine-intel-nuc)
-   - [Install Dependencies](#2-install-dependencies)
-   - [Build the Workspace](#3-build-the-workspace)
-   - [Source the Workspace](#4-source-the-workspace)
-   - [Set the ROS_DOMAIN_ID on your system](#5-set-the-ros_domain_id-on-your-system)
-   - [Launch MoveIt2 Demo](#6-launch-moveit2-demo)
+
 
 ---
 
@@ -95,6 +88,27 @@ The robot arm uses standard DH parameters for kinematic modeling:
 
 ## Setup Guide
 
+### Flash the SD Card
+
+As shared on MS Teams, download the `.img` file. Remove the SD card from the base of the manipulator.
+
+We will use the build in Disks utility to flash the image onto the SD card.
+
+<p align="center">
+    <img title="disk1" src="https://github.com/UoMMScRobotics/maniupulator-jazzy/blob/4d775245b05734a16eab930f339125fcebc825c5/Images/disks.png" width="60%"/>
+</p>
+<p align="center">
+    <img title="disk2" src="https://github.com/UoMMScRobotics/maniupulator-jazzy/blob/4d775245b05734a16eab930f339125fcebc825c5/Images/disks_flash.png" width="60%"/>
+</p>
+<p align="center">
+    <img title="disk3" src="https://github.com/UoMMScRobotics/maniupulator-jazzy/blob/4d775245b05734a16eab930f339125fcebc825c5/Images/disks_flash_2.png" width="60%"/>
+</p>
+
+Once the SD card is flashed re-insert back into the manipulator. 
+
+> [!IMPORTANT]
+> Downloading and flashing the image can take a long time. Why not reach the Understanding and [Troubleshooting ROS 2 Networking and Communication Guide](https://github.com/UoMMScRobotics/UOMDocumentationForLeoRover/blob/main/Further_reading/Networking.md) while you wait?
+
 ### Unboxing & Assembly
 
 1. **Base Plate Preparation:**  
@@ -117,7 +131,7 @@ The robot arm uses standard DH parameters for kinematic modeling:
    </p>
 
 4. **Connect Peripherals:**  
-   For the first boot, connect a keyboard, mouse, and microHDMI cable.  
+   For the first boot, connect a keyboard, mouse, ethernet cable and microHDMI cable.
    <p align="center">
      <img src="../Images/Manipulator/Image5_1.jpeg" alt="Connect Peripherals" width="350"/>
    </p>
@@ -131,295 +145,135 @@ The robot arm uses standard DH parameters for kinematic modeling:
 ---
 
 ### First Boot Steps
+
+This tutorial sets up a basic peer to peer wired network between the pi and another device (such as your NUC or laptop). This is to get you going, you will need to revise this set up when you consider your system architecture.
+
 > [!WARNING]
-> Users are experiencing mixed success when issues connecting to the network, causes by routing issues.
-> If you are unable to ping, please the 'Set up static IPs' section as an alternative. 
+> If previously you've set up up static IP addresses using `99-wired-static.yaml` then remove it using `sudo rm /etc/netplan/99-wired-static.yaml`, then `sudo netplan apply` to apply the change.
 
-1. **Connect to Network:**  
-   Connect the arm's Raspberry Pi to Wi-Fi or Ethernet.  
-   <p align="center">
-     <img src="../Images/Manipulator/Image7.png" alt="Network" width="500"/>
-   </p>
+The pi will boot into the default user `elephant` which uses the password `trunk`. The pi has a static IP address, `10.3.14.59` (a little π humour).
 
-2. **Get IP Address:**  
-   Check `wlan0` (Wi-Fi) or `eth0` (Ethernet) for the IP address (e.g., 192.168.1.193).  
-   <p align="center">
-     <img src="../Images/Manipulator/Image8.png" alt="IP Address" width="500"/>
-   </p>
+Check the network on the pi, it should be set up as below.
+<p align="center">
+    <img title="Network" src="https://github.com/UoMMScRobotics/maniupulator-jazzy/blob/4d775245b05734a16eab930f339125fcebc825c5/Images/Network.png" width="60%"/>
+</p>
+<p align="center">
+    <img title="Network" src="https://github.com/UoMMScRobotics/maniupulator-jazzy/blob/4d775245b05734a16eab930f339125fcebc825c5/Images/Network_mani_pi.png" width="60%"/>
+</p>
 
-3. **SSH Access:**  
-   SSH from your Intel NUC to the arm:  
-   ```bash
-   ssh er@IP_ADDRESS_OF_ARM
-   ```
-   Password: `Elephant` (case sensitive)  
-   <p align="center">
-     <img src="../Images/Manipulator/image-1.png" alt="SSH" width="700"/>
-   </p>
+**ROS2 Environment Setup on the pi:**  
+We can automate sourcing our ROS workspace by appending instructions to **the end of** the `.bashrc` script.
 
-4. **ROS2 Environment Setup:**  
-   We can automate sourcing our ROS workspace by appending instructions to **the end of** the `.bashrc` script.
+ ```
+ nano ~/.bashrc
+ ```
+ Scorll down to the bottom of the file and add:
+ Ensure you replace `YOUR_GROUP_NUMBER' with an int value.
+ ```bash
+ # Source ROS Jazzy setup with error checking
+if source /opt/ros/jazzy/setup.bash; then
+  echo "Sourced /opt/ros/jazzy/setup.bash successfully"
+else
+  echo "Failed to source /opt/ros/jazzy/setup.bash"
+fi
 
-   ```
-   nano ~/.bashrc
-   ```
-   Scorll down to the bottom of the file and add:
-   Ensure you replace `YOUR_GROUP_NUMBER' with an int value.
-   ```bash
-   # Source ROS Galactic setup with error checking
-   if source /opt/ros/galactic/setup.bash; then
-     echo "Sourced /opt/ros/galactic/setup.bash successfully"
-   else
-     echo "Failed to source /opt/ros/galactic/setup.bash"
-   fi
-   
-   # Source your workspace setup with error checking
-   if source ~/colcon_ws/install/setup.bash; then
-     echo "Sourced ~/colcon_ws/install/setup.bash successfully"
-   else
-     echo "Failed to source ~/colcon_ws/install/setup.bash"
-   fi
-   
-   # Export and print ROS_DOMAIN_ID
-   export ROS_DOMAIN_ID=YOUR_GROUP_NUMBER
-   echo "ROS_DOMAIN_ID is set to $ROS_DOMAIN_ID"
-   echo "To change this automation, use nano to edit ~/.bashrc and the source ~/.bashrc to apply."
-   ```
-   Exit nano (CTRL+X) and save.
+# Explicit setting of DDS
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+echo "DDS set to $RMW_IMPLEMENTATION"
 
-   After saving, apply the changes by running:
-   ```bash
-   source ~/.bashrc
-   ```
-   This ensures your environment variables.
-6. **Test Servos:**  
-   Launch the slider test:
-   ```bash
-   ros2 launch mycobot_280pi slider_control.launch.py
-   ```
+# Source your workspace setup with error checking
+if source ~/colcon_ws/install/setup.bash; then
+  echo "Sourced ~/colcon_ws/install/setup.bash successfully"
+else
+  echo "Failed to source ~/colcon_ws/install/setup.bash"
+fi
+
+# Export and print ROS_DOMAIN_ID
+export ROS_DOMAIN_ID=YOUR_GROUP_NUMBER
+echo "ROS_DOMAIN_ID is set to $ROS_DOMAIN_ID"
+
+# ROS_LOCALHOST_ONLY is being fazed out but is good for a quick set up
+export ROS_LOCALHOST_ONLY=0
+echo "ROS_LOCALHOST_ONLY is set to $ROS_LOCALHOST_ONLY"
+
+echo "To change this automation, use nano to edit ~/.bashrc and the source ~/.bashrc to apply."
+ ```
+ Exit nano (CTRL+X) and save.
+
+ After saving, apply the changes by running:
+ ```bash
+ source ~/.bashrc
+ ```
+
+**Test Servos:**  
+ Launch the slider test:
+ ```bash
+ ros2 launch mycobot_280pi slider_control.launch.py
+ ```
 > [!WARNING]
 > Avoid using the `Randomize` button. This interface does not contrain the manipulator. Random joint configurations may cause the arm to attempt to move through the table or other objects.
-   <p align="center">
-     <img src="../Images/Manipulator/image-2.png" alt="Slider Test" width="700"/>
-   </p>
-
 ---
 
-> [!CAUTION]
-> The section is a currently under development.
-### Set up static IPs (Alternative)
-The aim of this sectiois to set up the laptop/NUC with 192.168.12.1/24 as it's IP address and the Manipulator's raspberry pi with 192.168.12.2/24 as it IP address on a local network.
 
-   Physically connect your manipulator arm and intel NUC/laptop by ethernet cable
-   On both machines run:
-   ```
-   ip link
-   ```
-   On the NUC/Laptop we typically expect `enp0s31f6` and on the Manipulator's pi typically we expect `eth0`. This guide assumes this, if your devices differ, ammend as required. 
+**Laptop/NUC setup**  
 
-**Configure static IPs**
-In Laptop/NUC terminal
+> [!WARNING]
+> If previously you've set up up static IP addresses using `99-wired-static.yaml` then remove it using `sudo rm /etc/netplan/99-wired-static.yaml`, then `sudo netplan apply` to apply the change.
+> 
+Now let's set up your laptop/NUC for our peer to peer wired network. Ensure you have ROS Jazzy installed on the device and you have the ethernet cable plugged into both your device and the raspberry pi. 
+Again we can automate sourcing our ROS workspace by appending instructions to **the end of** the `.bashrc` script.
+Ensure you replace `YOUR_GROUP_NUMBER' with an int value.
 ```
-sudo nano /etc/netplan/99-wired-static.yaml
+# Source ROS Jazzy setup with error checking
+if source /opt/ros/jazzy/setup.bash; then
+  echo "Sourced /opt/ros/jazzy/setup.bash successfully"
+else
+  echo "Failed to source /opt/ros/jazzy/setup.bash"
+fi
+
+# Delcare the DDS
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+echo "Explicilty set fast DDS"
+
+
+# Export and print ROS_DOMAIN_ID
+export ROS_DOMAIN_ID=10
+echo "ROS_DOMAIN_ID is set to $ROS_DOMAIN_ID"
+echo "To change this automation, use nano to edit ~/.bashrc and the source ~/.bashrc to apply."
+
+# For quick setup use ROS_LOCALHOST_ONLY, do revise later
+export ROS_LOCALHOST_ONLY=0
+echo "ROS_LOCALHOST_ONLY set to $ROS_LOCALHOST_ONLY"
 ```
-> [!NOTE]
-> Context: Named 99 so doesn't override any defaults and is applied last so guarantees priority 
-   
-   Paste the below into the nano editor (note the ip address)
-   ```
-   network:
-     version: 2
-     renderer: NetworkManager
-     ethernets:
-       enp0s31f6:
-         dhcp4: false
-         addresses:
-           - 192.168.12.1/24
-   ```
-   Exit (CTRL+X) and save.
-   
-   Apply the config
-   ```
-   sudo chmod 600 /etc/netplan/99-wired-static.yaml
-   sudo netplan apply
-   ```
-   > [!NOTE]
-   > Without the chmod 600 command, netplan with throw a warning that the config is too open. On an isolated network this isn't a worry, but useful to store somewhere in your brain. chmod 600 specifies that only the owner can read and write the file, but suppresses the warning.
-   
-   Verify  
-   ```
-   ip addr show enp0s31f6
-   ```
-   
-   On the Manipulator
-   ```
-   sudo nano /etc/netplan/99-wired-static.yaml
-   ```
-  Paste the below into the nano editor (note the ip address)
-   ```
-   network:
-     version: 2
-     ethernets:
-       eth0:
-         dhcp4: false
-         addresses:
-           - 192.168.12.2/24
+ Exit nano (CTRL+X) and save.
 
-   ```
-   Exit (CTRL+X) and save.
-   
-   Apply the config
-   ```
-   sudo chmod 600 /etc/netplan/99-wired-static.yaml
-   sudo netplan apply
-   ```
-   Verify
-   ```
-   ip addr show eth0
-   ```
-   **Check connection**
-   On NUC/Laptop ping the Pi
-   ```
-   ping -c 3 192.168.12.2
-   ```
-   On the Pi ping the NUC/Laptop
-   ```
-   ping -c 3 192.168.12.1
-   ```
-   **You can now SSH**
-   On the NUC:
-   ```
-   ssh -X er@192.168.12.2
-   ```
-   Password for the Manipulator's arm is `Elephant`, case sensative.
-   The `-X` flag enables X11 forwarding when connecting, useful if you want to visualise the `rqt_graph`.
-> [!CAUTION]
-> The contruction zone has ended.
+ After saving, apply the changes by running:
+ ```bash
+ source ~/.bashrc
+ ```
 
----
+**Test the set up**
 
-### Setting up a Service for Consequent Boots
+On the raspberry pi run: `ros2 launch mycobot_280pi slider_control.launch.py`. Leave that running and turn your attention to your other device and run: `ros2 topic list`. You should be able to see the topics running on your arm from your NUC/Laptop.
 
-#### 1. Create a Headless Launch Script
+**Remote Access**
 
-SSH into the Pi and create the script:
-```bash
-nano ~/start_mycobot.sh
+You are not required to use a monitor and pherierals everytime you want to use your raspberry pi. You can remove access the device, in this set up we use the static IP and can SSH.
 ```
-Paste:
-```bash
-#!/bin/bash
-source /opt/ros/galactic/setup.bash
-source ~/colcon_ws/install/setup.bash
-ros2 run mycobot_280pi slider_control
+ssh elephant@10.3.14.59
 ```
-Save and exit (`Ctrl+O`, `Enter`, `Ctrl+X`).  
-Make it executable:
-```bash
-chmod +x ~/start_mycobot.sh
+The password being `trunk`.
+Any issues with SSH please see troubleshooting.
+
+**Troubleshooting**
+
+Any issues with `known_hosts` try:
 ```
-
-#### 2. Create a systemd Service File
-
-Create `/etc/systemd/system/mycobot.service`:
-`sudo nano /etc/systemd/system/mycobot.service`
+ssh-keygen -R 10.3.14.59
 ```
-[Unit]
-Description=MyCobot ROS 2 Launch
-After=network.target
+Any issues with hanging when trying to SSH, or Black GUI with Gazebo please the [Troubleshooting ROS 2 Networking and Communication Guide](https://github.com/UoMMScRobotics/UOMDocumentationForLeoRover/blob/main/Further_reading/Networking.md). 
 
-[Service]
-Type=simple
-User=er
-WorkingDirectory=/home/er
-ExecStart=/home/er/start_mycobot.sh
-Restart=on-failure
-RestartSec=5
-StandardOutput=journal
-StandardError=journal
+**Recommended next steps**
+The world is your oyster! You do need to figure our how you're going to do everything else such as trajectories motion planners, kinematics solvers, collision detection, etc. And how the gripper works... And also consider the bigger networking plan beyond the peer to peer network covered in this tutorial. A lot to think about! 
 
-[Install]
-WantedBy=multi-user.target
-```
-
-#### 3. Enable and Start the Service
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable mycobot.service
-sudo systemctl start mycobot.service
-```
-
-#### 4. Reboot and Test
-
-Reboot the Pi:
-```bash
-sudo reboot
-```
-Check service status:
-```bash
-systemctl status mycobot.service
-```
-<p align="center">
-  <img src="../Images/Manipulator/image-3.png" alt="Slider Test" width="700"/>
-</p>
-
-> [!TIP]
-> You could also add a check to the `.bashrc` script on the Manipulator's pi
->```
->echo "Checking MyCobot service status..."
->systemctl is-active --quiet mycobot.service && echo "MyCobot service is running." || echo "MyCobot service is NOT running."
->```
----
-## Cloning and Building the Elephant Arm Packages
-
-Follow these steps to clone the required packages and set up your workspace:
-
-### 1. Create the Workspace and Clone the Repository in your main machine (Intel NUC)
-
-```bash
-mkdir -p ~/elephant_arm_ws
-cd ~/elephant_arm_ws
-git clone https://github.com/UoMMScRobotics/MSc-manipulator-task.git
-mv MSc-manipulator-task src
-```
-
-### 2. Install Dependencies
-
-```bash
-rosdep install --from-paths src -y --ignore-src
-```
-
-### 3. Build the Workspace
-
-```bash
-colcon build
-```
-
-### 4. Source the Workspace
-
-```bash
-source install/setup.bash
-```
-### 5. Set the ROS_DOMAIN_ID on your system
-Repeat the ROS_DOMAIN_ID setup on your own machine to ensure network isolation between teams.  
-Add the following line to your `~/.bashrc`, replacing `YOUR_GROUP_NUMBER` with your assigned number:
-
-```bash
-export ROS_DOMAIN_ID=YOUR_GROUP_NUMBER
-```
-
-After saving, run `source ~/.bashrc` or open a new terminal to apply the change. This ensures only your team can communicate with your robot arm.
-
-
-### 6. Launch MoveIt2 Demo
-
-```bash
-ros2 launch mycobot_280_moveit2 demo.launch.py
-```
-<p align="center">
-  <img src="../Images/Manipulator/image-4.png" alt="MoveIt2 Demo" width="700"/>
-</p>
-
-Familiarise yourself with the moveit2 simulation before it is tested on the actual robot. This can be done by varying the sliders to see how the robot moves and then testing it with the actual robot.
 
