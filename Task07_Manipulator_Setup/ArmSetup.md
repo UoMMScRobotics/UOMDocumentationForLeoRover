@@ -268,15 +268,28 @@ Any issues with SSH please see troubleshooting.
 
 ### Troubleshooting
 
-Any issues with `known_hosts` try:
-```
-ssh-keygen -R 10.3.14.59
-```
+* General check
+   * In a multi system setup ensure the DDS is being used, check by runing `ros2 doctor --report` on all machines
 
-Any issues with hanging when trying to SSH, or Black GUI with Gazebo please the [Troubleshooting ROS 2 Networking and Communication Guide](https://github.com/UoMMScRobotics/UOMDocumentationForLeoRover/blob/main/Further_reading/Networking.md). 
+* Issues with `known_hosts` try:
+   ```
+   ssh-keygen -R 10.3.14.59
+   ```
+
+* Issues with hanging when trying to SSH, or Black GUI with Gazebo.
+   * Please the [Troubleshooting ROS 2 Networking and Communication Guide](https://github.com/UoMMScRobotics/UOMDocumentationForLeoRover/blob/main/Further_reading/Networking.md), where it will explain the background context and provide a fix.
+
+
 
 ### Recommended next steps
 
-The world is your oyster! You do need to figure out how you're going to do everything else such as trajectories, motion planners, kinematics solvers, collision detection, etc. Using Move it would be an option, but others are available. And how the gripper works... And also consider the bigger networking plan beyond the peer to peer network covered in this tutorial. A lot to think about! 
+The world is your oyster! Do not fall into doing nothing in the "abyss of unstructuredness"! 
+Things you need to do that will take longer than you expect:
+* How are you going to trajectories, motion planners, kinematics solvers, collision detection, etc. Using `MoveIt 2` is an option, but others are available.
+* Have you used the gripper and considered how that needs to be set up?
+* What is the bigger networking plan beyond the peer to peer network covered in this tutorial. How do you need to change/expand this network set up to cover your whole system?
+   * If you haven't read [Troubleshooting ROS 2 Networking and Communication Guide](https://github.com/UoMMScRobotics/UOMDocumentationForLeoRover/blob/main/Further_reading/Networking.md) now might be a good time.
+* Have you setup simulation so you can work on your project without having physical access to your robot?
+
 
 
