@@ -271,10 +271,35 @@ Any issues with SSH please see troubleshooting.
 * General check
    * In a multi system setup ensure the DDS is being used, check by runing `ros2 doctor --report` on all machines
 
+* Find out more with verbose 
+   ```
+   ssh -vvv elephant@10.3.14.59
+   ```
+
 * Issues with `known_hosts` try:
    ```
    ssh-keygen -R 10.3.14.59
    ```
+* Check the device you're trying to SSH from has the SSH client
+   ```
+   ssh -V
+   #sudo apt install openssh-client #if needed
+   ```
+
+* Check the device you're trying to SSH into has the SSH server
+```
+# Check if the SSH server (sshd) service is running
+sudo systemctl status ssh
+
+# Start the SSH server immediately (if it's installed but not running)
+sudo systemctl start ssh
+
+# Enable the SSH server to start automatically at boot
+sudo systemctl enable ssh
+
+# Install the OpenSSH server package (if it's not already installed)
+sudo apt update && sudo apt install -y openssh-server
+```
 
 * Issues with hanging when trying to SSH, or Black GUI with Gazebo.
    * Please the [Troubleshooting ROS 2 Networking and Communication Guide](https://github.com/UoMMScRobotics/UOMDocumentationForLeoRover/blob/main/Further_reading/Networking.md), where it will explain the background context and provide a fix.
