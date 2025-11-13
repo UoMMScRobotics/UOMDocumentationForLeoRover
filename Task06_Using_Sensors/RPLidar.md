@@ -60,3 +60,6 @@ You should see the following Rviz screen. Move the lidar to see how it updates t
 <p align="center">
     <img src="../Images/Sensor/Lidar_rviz.png" alt="Lidar_Rviz" width="500"/>
 </p>
+
+> [!TIP]
+> Look at the base of your LiDAR to find the model name. You can learn more about your device’s specifications on the [manufacturer’s website](https://www.slamtec.com/en/support#rplidar-a-series).
