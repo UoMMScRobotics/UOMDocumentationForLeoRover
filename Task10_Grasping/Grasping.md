@@ -24,7 +24,7 @@ The most common gripper design is the two-finger type, typically a parallel moti
 ---
 <h2 align="center">Grasping</h2>
 
-Packages such as MoveIt have some built-in [grasping utilities](https://moveit.picknik.ai/humble/doc/tutorials/pick_and_place_with_moveit_task_constructor/pick_and_place_with_moveit_task_constructor.html) such as simple pick and place. These packages can do both the grasp generation and execution steps, but they may be limited in scope for your needs.
+Packages such as MoveIt have some built-in grasping utilities such as simple pick and place. These packages can do both the grasp generation and execution steps, but they may be limited in scope for your needs.
 You can also separately calculate your grasp and then use MoveIt to control your robot to grasp the objects. 
 
 #
@@ -37,14 +37,10 @@ If you would like to generate grasps at run time, depending on your choice of en
 ---
 <h2 align="center">Grasp Execution</h2>#
 
-Once you have calculated your grasp, you can execute the grasp in your robot. You can use different control techniques depending on how you represent your grasp, such as pose control, position control, etc. For example [Move Group](https://ros-planning.github.io/moveit_tutorials/doc/move_group_python_interface/move_group_python_interface_tutorial.html#getting-started) in MoveIt! can be used to plan and execute the movements of your robot. There are also other control libraries and approaches you can use. Simple plans could be predefined, such as moving above the object and down to grasp the pose. You may wish to add a feedback loop to your control to account for real-world errors. This can be done using feedback from your available sensors, such as visual servoing from visual information. There are many examples available on GitHub. 
+Once you have calculated your grasp, you can execute the grasp in your robot. You can use different control techniques depending on how you represent your grasp, such as pose control, position control, etc. For example Move Group in MoveIt! can be used to plan and execute the movements of your robot. There are also other control libraries and approaches you can use. Simple plans could be predefined, such as moving above the object and down to grasp the pose. You may wish to add a feedback loop to your control to account for real-world errors. This can be done using feedback from your available sensors, such as visual servoing from visual information. There are many examples available on GitHub. 
 
 ---
 <h2 align="center">myCobot 280 Pi Manipulator Arm</h2>#
-The following GitHub repository includes all necessary ROS2 packages and instructions for using the manipulator arm in this project:
-
-[Arm Github Page](https://github.com/UoMMScRobotics/MSc-manipulator-task.git)
-
 The documentation regarding the kinematic information, ROS/ROS2 interfaces, etc. could be found in the following link:
 
 [Arm Documentation](https://docs.elephantrobotics.com/docs/mycobot_280_pi_en/)
