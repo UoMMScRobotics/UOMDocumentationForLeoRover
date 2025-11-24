@@ -302,7 +302,9 @@ Any issues with SSH please see troubleshooting.
    # Install the OpenSSH server package (if it's not already installed)
    sudo apt update && sudo apt install -y openssh-server
    ```
-
+* Issues with clocks out of sync
+   * Give the device internet access with `nmtui` or other means, then check `timedatectl status`.
+     
 * Issues with hanging when trying to SSH, or Black GUI with Gazebo.
    * Please the [Troubleshooting ROS 2 Networking and Communication Guide](https://github.com/UoMMScRobotics/UOMDocumentationForLeoRover/blob/main/Further_reading/Networking.md), where it will explain the background context and provide a fix.
 
