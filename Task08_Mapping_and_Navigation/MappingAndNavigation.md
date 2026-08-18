@@ -43,3 +43,12 @@ ROS2 Control allows for the same joints or group of joints to be managed using d
 The trajectory control enables both axes of the pan and tilt to reach their respective goal positions at the same time.  This also can help with smoother movement, for example if a jerk minimised trajectory controller is in use.  The choice of controller often needs to be defined as part of a launch file or yaml file, so read the documentation for your hardware.  Ideally, a solution such as MoveIt will provide the trajectory, and the hardware (via ROS2 Control) will execute that trajectory.
 
 Solutions such as [MoveIt](https://moveit.ros.org/) for manipulators incorporate a great deal of different planners, and will likely always use trajectory control.
+
+---
+<h2 align="center">Coordinate Frames and TF</h2>
+
+ROS2 uses the tf2 system to keep track of the position and orientation of different coordinate frames on the robot. For a mobile robot, common frames include `map`, `odom`, `base_link`, and frames associated with sensors such as a lidar or camera.
+
+For navigation, these frames form a transform tree. The `map` frame represents the robot within the global map, while `odom` provides a locally continuous estimate of its motion. The `base_link` frame is attached to the robot itself, with sensors positioned relative to it. Nav2 relies on these transforms to convert sensor measurements, goals and paths between the appropriate coordinate systems.
+
+Some transforms change continuously as the robot moves. For example, `odom → base_link` is normally updated using wheel odometry, while `map → odom` is updated by SLAM or localisation to account for accumulated odometry error. Fixed relationships, such as the position of a lidar relative to `base_link`, can instead be defined by the robot's URDF and published using `robot_state_publisher`.
