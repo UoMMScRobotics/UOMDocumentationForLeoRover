@@ -1,6 +1,9 @@
 <h1 align="center"> LeoRover Assembly </h1>
 
-This section is dedicated to the assembly stage of the Leo-Rover robot. Detailed official documentation for the construction of the Leo-Rover is available and should be followed throughout the assembly process, as outlined in the official assembly guide found at https://www.leorover.tech/assembly/tools. However, it is imperative to underscore certain critical aspects and considerations relevant to the assembly procedure. As such, this section aims to highlight key steps and noteworthy insights that need special attention. It is imperative that you review both the comprehensive documentation available on the official Leo-Rover website and the supplementary information provided herein.
+> [!NOTE]
+> The Leo Rover range has a 1.8 and 1.9 version. Please check you are looking at the correct version.
+
+This section is dedicated to the assembly stage of the Leo-Rover robot. Detailed official documentation for the construction of the Leo-Rover is available and should be followed throughout the assembly process, as outlined in the official assembly guide found at [https://docs.fictionlab.pl/leo-rover/1.8/manuals](https://docs.fictionlab.pl/leo-rover/1.8/manuals). However, it is imperative to underscore certain critical aspects and considerations relevant to the assembly procedure. As such, this section aims to highlight key steps and noteworthy insights that need special attention. It is imperative that you review both the comprehensive documentation available on the official Leo-Rover website and the supplementary information provided herein.
 
 **Please follow the instructions until Task 7, then use documentation that we provide in the next stage for the remaining parts.**
 
@@ -8,7 +11,7 @@ This section is dedicated to the assembly stage of the Leo-Rover robot. Detailed
 
 <h2 align="center">Task 1: Wheel Assembly</h2>
 
-You should assemble four wheels. You can follow the instructions provided at https://www.leorover.tech/assembly/wheel-assembly. The estimated time required for assembling each wheel is approximately 20 minutes. The first step of the instructions has already been completed, so you do not need to perform 'Step 1: Motor assembly.' For the remaining parts, please follow the instructions. You can work on each wheel separately as there is no dependency during the assembly process.
+You should assemble four wheels. You can follow the instructions provided at [https://docs.fictionlab.pl/leo-rover/1.8/manuals/wheel-assembly](https://docs.fictionlab.pl/leo-rover/1.8/manuals/wheel-assembly). The estimated time required for assembling each wheel is approximately 20 minutes. The first step of the instructions has already been completed, so you do not need to perform 'Step 1: Motor assembly.' For the remaining parts, please follow the instructions. You can work on each wheel separately as there is no dependency during the assembly process.
 
 Pay attention to the following when you assemble:
 
@@ -24,7 +27,7 @@ Make sure the wheel mountings pair is aligned with the wheel cap.
 
 <h2 align="center">Task 2: Main Electronics Box (MEB)</h2>
 
-Please follow the instructions available at the following link: https://www.leorover.tech/assembly/main-electronics-box-meb
+Please follow the instructions available at the following link: [https://docs.fictionlab.pl/leo-rover/1.8/manuals/main-electronics-box-meb](https://docs.fictionlab.pl/leo-rover/1.8/manuals/main-electronics-box-meb)
 
 **Important Notes:**
 
