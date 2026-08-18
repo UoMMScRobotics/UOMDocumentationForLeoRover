@@ -66,7 +66,7 @@ You have SSH client already installed on ubuntu. Open a new terminal in your com
 ssh pi@10.0.0.1
 ```
 
-The `ssh` is the Secure Shell Protocol, requesting to access the user `pi` at the IP address of `10.0.0.1`, which as been statically as part of LeoOS. 
+The `ssh` is the Secure Shell Protocol, requesting to access the user `pi` at the IP address of `10.0.0.1`, which as been statically set by the LeoOS. 
 
 When you're prompted for a password enter `raspberry`. You will see your terminal will have changed to `pi@leo` or similar. 
 
@@ -100,24 +100,106 @@ It will disconnect you from the LeoRover Network, and the Network ID will be upd
 </p>
 
 
+<h2 align="center">Step 6: Updating firmware</h2>
+
+Now your Network ID is renamed and there is no confusing your network with another teams let us make sure the firmware on the Leo Rover's Pi is up to date. SSH from your device into the Leo Rover, same as you did in Step 4.
+
+<h3>Configure your device as an internet gateway</h3>
+
+To update and install operating system packages, the system needs to connect to the internet.  First, open the NetworkManager Text User Interface:
+
+```
+nmtui
+```
+
+`nmtui` instructs the underlying system NetworkManager service to bring that specific network profile up, apply its configuration settings, and bind it to the physical or virtual network interface. 
 
 
+Activate a connection
 
+<img title="Activate a connection"  src="../Images/LeoOS/Internet_1.png"  width=40% height=auto>
 
+Connect to UoM_Wifi
 
+<img title="Connect to UoM_Wifi"  src="../Images/LeoOS/Internet_2.png"  width=40% height=auto>
 
+After a while, a login screen for UoM_Wifi will appear.
 
+<img title="UoM Wifi Login"  src="../Images/LeoOS/Internet_UoM_Login.png"  width=40% height=auto>
 
+Enter your student information and connect. 
 
+<h3>Apply the updates</h3>
 
+Check for and install update to the packages on your system. The -y flag automatically installs without prompting for confirmation. 
 
+```
+sudo apt update && sudo apt upgrade -y
+```
 
+Check if the current leo firmware requires any updates:
 
+```
+ros2 run leo_fw update
+```
+<p align="center">
+    <img title="firmware_update" src="../Images/ROS2/firmware_update.png" width="40%">
+</p>
+
+As outlined in the Fiction Lab (the makers of Leo Rover) documentation: https://docs.fictionlab.pl/leo-rover/1.8/guides/firmware-update
 
 ---
-<h2 align="center">Step X: Connecting via Remote Desktop Connection</h2>
+<h2 align="center">Step 7: Publishing and Listening ROS2 Topics</h2>
+Now you should be able to publish and listen to robot-related ROS2 topics. To list all published topics:
 
-If you need to access more than the terminal then you need to use remotely connect to the whole desktop. To do this we can use the Remmina application
+```
+ros2 topic list
+```
+
+<p align="center">
+    <img title="all_topics" src="../Images/ROS2/topic_list.png" width="20%">
+</p>
+
+You can listen to **joint_states**:
+
+```
+ros2 topic echo /joint_states
+```
+<p align="center">
+    <img title="joint_state" src="../Images/ROS2/joint_state.png" width="40%">
+</p>
+
+
+You can also send linear and angular velocities to the robot using the **cmd_vel** topic. For example, to send a forward velocity of 1 m/s for once,
+
+> [!WARNING]
+> Please ensure your robot is in the designated operating area or lifted so the wheels are not touching the ground.
+
+```
+ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0}}"
+```
+
+<p align="center">
+    <img title="send_velocity" src="../Images/ROS2/send__velocity.png" width="80%">
+</p>
+
+Alternatively, you can send it at a certain frequency.
+
+```
+ros2 topic pub --rate 1 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0}}"
+```
+where the rate defines the frequency, which is 1 Hz in the example.
+
+<p align="center">
+    <img title="send_velocity_periodic" src="../Images/ROS2/send__velocity_periodic.png" width="80%">
+</p>
+
+For more inspiration you can read more at: https://docs.fictionlab.pl/leo-rover/advanced-guides/ros-development#introspecting-ros-2-network-with-command-line-tools
+
+---
+<h2 align="center">Step 8: Connecting via Remote Desktop Connection</h2>
+
+If you need to access more than the terminal then you need to remotely connect to the whole desktop. To do this we can use the Remmina application
 
 <p align="center">
     <img title="Open Remmina" src="../Images/LeoOS/remmina_1.png" width="60%">
@@ -145,98 +227,5 @@ Now, you should be able to see the screen:
     <img title="LeoOS home" src="../Images/LeoOS/remmina_5.png" width="60%">
 </p>
 
-
----
-<h2 align="center">Step 7: Update Robot Firmware</h2>
-
-<h3>Configure your device as an internet gateway</h3>
-
-To update and install operating system packages, the system needs to connect to the internet.  First, open the NetworkManager Text User Interface:
-
-```
-nmtui
-```
-
-Activate a connection
-
-<img title="Activate a connection"  src="../Images/LeoOS/Internet_1.png"  width=40% height=auto>
-
-Connect to UoM_Wifi
-
-<img title="Connect to UoM_Wifi"  src="../Images/LeoOS/Internet_2.png"  width=40% height=auto>
-
-After a while, a login screen for UoM_Wifi will appear.
-
-<img title="UoM Wifi Login"  src="../Images/LeoOS/Internet_UoM_Login.png"  width=40% height=auto>
-
-Enter your student information and connect. Verify that you have an internet connection.
-
-<h3>Apply the updates</h3>
-
-Check for and install update to the packages on your system. The -y flag automatically installs without prompting for confirmation. 
-
-```
-sudo apt update && sudo apt upgrade -y
-```
-
-Check if the current leo firmware requires any updates:
-
-```
-ros2 run leo_fw update
-```
-<p align="center">
-    <img title="firmware_update" src="../Images/ROS2/firmware_update.png" width="40%">
-</p>
-
-
----
-<h2 align="center">Step 8: Publishing and Listening ROS2 Topics</h2>
-Now you should be able to publish and listen to robot-related ROS2 topics. To list all published topics:
-
-```
-ros2 topic list
-```
-
-<p align="center">
-    <img title="all_topics" src="../Images/ROS2/topic_list.png" width="20%">
-</p>
-
-You can listen to **joint_states**:
-
-```
-ros2 topic echo /joint_states
-```
-<p align="center">
-    <img title="joint_state" src="../Images/ROS2/joint_state.png" width="40%">
-</p>
-
-or imu data **firmware/imu**:
-```
-ros2 topic echo /firmware/imu
-```
-
-<p align="center">
-    <img title="imu" src="../Images/ROS2/imu.png" width="40%">
-</p>
-
-You can also send linear and angular velocities to the robot using the **cmd_vel** topic. For example, to send a forward velocity of 1 m/s for once,
-
-```
-ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0}}"
-```
-
-<p align="center">
-    <img title="send_velocity" src="../Images/ROS2/send__velocity.png" width="80%">
-</p>
-
-Alternatively, you can send it at a certain frequency.
-
-```
-ros2 topic pub --rate 1 /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.2, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0}}"
-```
-where the rate defines the frequency, which is 1 Hz in the example.
-
-<p align="center">
-    <img title="send_velocity_periodic" src="../Images/ROS2/send__velocity_periodic.png" width="80%">
-</p>
+Accessing the entire desktop is useful early on, when you want to understand how to Leo Rover works in isolation. Commands like `rqt_graph` will show you active nodes and topics, whereas `ros2 run tf2_tools view_frames` will show you to coordinate frames and transformations on the Leo Rover.
 
