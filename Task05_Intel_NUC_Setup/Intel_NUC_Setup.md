@@ -2,19 +2,21 @@
 Before you can start using the Intel NUC computer, you need to install the operating system (Ubuntu 24.04) and ROS2 Jazzy. This section will guide you through the installation of the required software.
 
 ---
-<h2 align="center">Step 1: Burning the Ubuntu 24.04 Image into a USB Drive</h2>
+<h2 align="center">Step 1: Creating a bootable USB Drive of Ubuntu 24.04 (Noble Numbat)</h2>
 
 First, you need to download the Ubuntu 24.04 OS image to your computer from
-https://ubuntu.com/download/desktop
+https://releases.ubuntu.com/noble/
 
-After downloading, you need to follow the same steps as burning the LeoROS image onto the SD Card. First, open the Etcher application, select the downloaded Ubuntu 24.04 image, choose the USB device, and finally, click on Flash. This process can take around 10 minutes.
+To create the bootable drive, I recommend using the Disks application. The following link will take you to guidance on how to create a bootable USB stick: https://ubuntu.com/desktop/docs/en/latest/how-to/create-a-bootable-usb-stick/
+
+If for whatever reason you do not like using Disk, alternatives such as balenaEtcher or Rufus are available.
 
 ---
 <h2 align="center">Step 2: Installing Ubuntu 24.04 on the NUC</h2>
 
 Plug in the USB with Ubuntu 24.04 into one of the USB ports of the Intel NUC and turn it on.
 
-During the initial power on, ensure you hold down F10.  This will bring up the bios boot menu, select the USB stick.  If you see the operating system begin to start, you have missed the window to change boot media, restart the NUC and try again.
+During the initial power on, ensure you repeatedly press F10. This will bring up the bios boot menu, select the USB stick. If you see the operating system begin to start, you have missed the window to change boot media, restart the NUC and try again.
 
 Then, you can follow the steps provided https://ubuntu.com/tutorials/install-ubuntu-desktop#5-installation-setup
 
@@ -83,23 +85,52 @@ You should see the following output:
 
 <img title="ROS2_Test"  src="../Images/ROS2/ros2_test2.png"  width=80% height=auto>
 
-To automatically source the ROS2 workspace, you can use the following commands:
+
+### Automating sourcing your workspace(s)
+
+To automatically source the ROS2 workspace, you need to edit `~/.bashrc`. `~/.bashrc` is a hidden configuration script in your home directory that the Bash shell runs automatically every time you open a new interactive terminal session. You can edit it by:
 ```
-echo "source /opt/ros/jazzy/setup.bash" >> ~/.bashrc
+nano ~/.bashrc
 ```
+Reminder: [nano keyboard shortcuts](https://www.nano-editor.org/dist/latest/cheatsheet.html)
+
+Add to the end of bashrc:
+
+```
+# Source ROS Jazzy setup with error checking
+if source /opt/ros/jazzy/setup.bash; then
+  echo "Sourced /opt/ros/jazzy/setup.bash successfully"
+else
+  echo "Failed to source /opt/ros/jazzy/setup.bash"
+fi
+
+
+# You can also set ROS environment variables 
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+echo "ROS Middleware set to $RMW_IMPLEMENTATION"
+```
+
+Then
 
 ```
 source ~/.bashrc
 ```
+You should see the echo output as you open a new terminal.
+
+> [!IMPORTANT]
+> Highly recommend automating sourcing of your ROS2 workspace! Adding echo to describe what is happening is incredibly useful in a team project.
+
 
 ---
 <h2 align="center">Step 4: Connecting NUC with LeoRover</h2>
 
-You are provided with an Ethernet cable to establish a connection between LeoRover and the Intel NUC. After connecting them, you can observe topics published by LeoRover and send velocity commands to the robot from the NUC. Just as you did inside LeoRover, try sending velocity commands from the NUC's terminal.
+As you did with you student laptop, you can connect the NUC to the Leo Rover in the same method. You can SSH into the Leo Rover if you like. Alternatively, provided the device you've connected has ROS installed and sourced, you can make use of the [Data Distribution Service (DDS)](https://design.ros2.org/articles/ros_on_dds.html) that comes with ROS2 and send commands and view topics from the the NUC's terminal.
 
-```bash
+```
+ros2 topic list
+```
+```
 ros2 topic pub /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 0.1, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0.0}}"
 ```
-> [!TIP]
-> At a later stage of your project, you might want to look into setting up a hotspot service from you NUC to your laptop.
+
 
