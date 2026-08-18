@@ -1,5 +1,5 @@
 <h1 align="center"> Using Realsense with ROS2 </h1>
-This section is dedicated to the installation and usage of Realsense Camera on your NUC. Once you complete this section, you will be able to visualize Depth and RGB data with Rviz and Realsense-Viewer.
+This section is dedicated to the installation and usage of Realsense Camera. Once you complete this section, you will be able to visualise Depth and RGB data with Rviz and Realsense-Viewer.
 
 ---
 
@@ -44,3 +44,6 @@ and select **/camera/depth/color/points** as the topic name:
 <p align="center">
     <img src="../Images/Sensor/rviz_point_cloud.png" alt="PC Rviz 2" width="80%"/>
 </p>
+
+> [!IMPORTANT]
+> Highly recommend developing your vision pipeline in the ROS2 framework. 
