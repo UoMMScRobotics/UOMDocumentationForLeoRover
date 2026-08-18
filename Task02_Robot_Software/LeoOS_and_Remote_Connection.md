@@ -3,62 +3,21 @@
 This section focuses on installing the LeoOS operating system on the Raspberry Pi and connecting to the Raspberry Pi using two different methods. Once you have successfully completed the steps in this section, you will be able to access and modify the folders and settings inside the Raspberry Pi.
 
 ---
-<h2 align="center">Step 1: Installing Required Softwares</h2>
+<h2 align="center">Step 1: Download LeoOS</h2>
 
-**LeoOS** : This is the official operating system for Raspberry Pi, which includes ROS2 Jazzy pre-installed. You will need to burn this image onto your Raspberry Pi. You can download the LeoOS image from
+**LeoOS** is the official Leo Rover operating system for Raspberry Pi, which includes ROS2 Jazzy pre-installed. You will need to flash this image onto your Raspberry Pi's SD card. You can download the LeoOS image from
 
 https://github.com/LeoRover/LeoOS/releases
 
-Install the latest **full** version of the LeoOS.
-
-**Balena Ethcer** : You will use it to burn the LeoOS image onto the SD card.
-
-Download Etcher from https://etcher.balena.io
-
-and install it on your computer.
-
-**For Linux**
-Please select the following option to dowload
-
-<p align="center">
-    <img title="Download Etcher App for Linux" src="../Images/LeoOS/LlinuxEtcher.png">
-</p>
-
-To run the application, either double click the **balena-etcher** icon (see the image below),
-
-<p align="center">
-    <img title="Double Click balena-etcher Icon" src="../Images/LeoOS/EtcherExecutable.png">
-</p>
-
-or run it from the terminal using
-```
-./balena-etcher
-```
-
-**PuTTY** :You will use it to connect to the Raspberry Pi using your computer (SSH connection).
-
-Download PuTTY from https://www.PuTTY.org
-and install it on your computer.
-You do not need to install PuTTY if have a linux installed computer.
-
+> [!TIP]
+> Install the latest **full** version of the LeoOS that is compatible with your Leo Rover.
 
 ---
-<h2 align="center">Step 2: Burning LeoOS Image into an SD Card Using Etcher</h2>
+<h2 align="center">Step 2: Create a bootable SD card</h2>
 
-Connect the SD Card to your computer. Open Etcher, and select the LeoOS you downloaded in Step 1.
+I recommend using the application Disks to create a bootable SD card. Disks is an application preinstalled on your Ubuntu Student laptop. The following link will take you to guidance on how to create a bootable USB stick, for your application you will be creating a bootable SD card but the steps are the same: https://ubuntu.com/desktop/docs/en/latest/how-to/create-a-bootable-usb-stick/
 
-<p align="center">
-    <img title="Ethcer App" src="../Images/LeoOS/OpenEtcher.png">
-</p>
-
-Select your USB device
-
-<p align="center">
-    <img title="USB Device" src="../Images/LeoOS/SelectDrive.png">
-</p>
-
-Finally, click 'Flash.' It will take around 5 minutes to finish the flashing process.
-
+If for whatever reason you do not like using Disk, alternatives such as balenaEtcher or Rufus are available. 
 
 ---
 <h2 align="center">Step 3: Turning On LeoRover</h2>
@@ -75,138 +34,90 @@ Turn on LeoRover by pressing the button shown in the following figure
 
 The green LED of the power button will start blinking, and after some time (15-20 seconds), you will be able to see the Wi-Fi network of the LeoRover.
 
-**Important Note** : To avoid confusion when setting up multiple robots, please follow these steps:
-
-<ol>
-<li>Do not turn on your robot at the same time to prevent difficulty in determining which Wi-Fi network belongs to your robot.</li>
-<li>One group should turn on their robot.</li>
-<li>Connect to the robot using the Wi-Fi network specific to their robot.</li>
-<li>Change the network ID to "LeoRover-GROUPX," where X represents your group number.</li>
-<li>Following groups should then follow the same procedure for their robots.</li>
-</ol>
-    
-Please note that these steps are only necessary during the initial setup of your robots. Once the network IDs are customized to include group numbers, you can run all the robots simultaneously without confusion, as each will have a distinctive name.
-
+> [!NOTE]
+> When you turn on your robot for the first time, it will have a default name. This will happen to all the teams. Therefore, it might be confusing if everyone happens to power on their robots at the same time. You may need to coordinate with the other teams should this happen. It will only happen on the first boot. Shortly you will rename you network ID, but first we need to actually access the Leo Rover's Pi remotely.
 
 ---
-<h2 align="center">Step 4: Connecting LeoRover</h2>
-### Windows ###
-You should see a LeoRover network specific to your robot, similar to the image below.
+<h2 align="center">Step 4: Connecting to the Leo Rover's Pi via the terminal</h2>
+
+You should see a Leo Rover network, similar to the image below.
 
 <p align="center">
     <img title="Wifi Leo" src="../Images/LeoOS/WifiImage1.png" width="40%">
 </p>
 
-The password for all networks (for all robots) is 'password' by default. Enter the password and connect to your robot.
+The password for all networks (for all robots) is `password` by default. Enter the password on your device and connect to your robot.
 
-After establishing the connection, run PuTTY, which you downloaded in Step 1. Type your robot's IP address (10.0.0.1) in the 'Host Name (or IP Address)' field and leave the other settings unchanged. Your PuTTY window should resemble the following image.
-<p align="center">
-    <img title="PuTTY Window" src="../Images/LeoOS/PuttyImage.png" width="40%">
-</p>
+> [!TIP]
+> You are not limited to connecting wirelessly, you can also connect using an ethernet cable.
 
-Click **Open** . The following warning will be raised, click **Accept**.
+Once a network connection is established you can access the user account on the Leo Rover's Raspberry Pi from the other device. Here is the account details.
 
-<p align="center">
-    <img title="PuTTY Warning" src="../Images/LeoOS/PuttySecurityAlert.png" width="40%">
-</p>
-
-Now, you should see a login screen like the image below. The login information should be as follows:
-
-**login as:** pi
+**user account:** pi
 
 **password:** raspberry
 
-<p align="center">
-    <img title="SSH Login" src="../Images/LeoOS/LoginRasperrySSH.png" width="70%">
-</p>
+For to purpose of customising the the Network ID we care going to access the `pi` account via the terminal. 
 
-You should log in after entering the provided ID and password. Please note that the password will not be visible as you type.
-
-### Linux ###
-
+### Remote Terminal Access ###
 You have SSH client already installed on ubuntu. Open a new terminal in your computer and type:
 
 ```
 ssh pi@10.0.0.1
 ```
-Then, type **yes** and **raspberry**.
 
+The `ssh` is the Secure Shell Protocol, requesting to access the user `pi` at the IP address of `10.0.0.1`, which as been statically as part of LeoOS. 
+
+When you're prompted for a password enter `raspberry`. You will see your terminal will have changed to `pi@leo` or similar. 
 
 ---
 <h2 align="center">Step 5: Changing Wifi ID</h2>
-Before proceeding, you need to change the name of your robot's Wi-Fi network ID, as explained in Step 3. To do this, open the network settings by pasting the following code into the PuTTY console:
+Let us change the name of your robot's Wi-Fi network ID. To do this, open the network settings by pasting the following code into the terminal where you have SSH into the Leo Rover's Pi.
+
 ```
 sudo nano /etc/hostapd/hostapd.conf
 ```
-Change the Wi-Fi name (SSID) according to your group number. For example, the first group should name their network as 'LeoRover-GROUP1'.
+> [!NOTE]
+> `nano` is a very helpful command line text editor, you can find all the nano keyboard shortcuts here: https://www.nano-editor.org/dist/latest/cheatsheet.html
+
+Change the Wi-Fi name (SSID) according to your group number. For example, group 1 should name their network as 'LeoRover-GROUP1'.
 
 <p align="center">
     <img title="Changing Wifi Name" src="../Images/LeoOS/ChangeWifiName.png" width="60%">
 </p>
 
-Please only change the name of the network; do not modify the password or other parameters. After renaming it correctly, press **Ctrl+o**, **Enter**, **Ctrl+x**.
+Please only change the name of the network. After renaming it , press **Ctrl+o**, **Enter**, **Ctrl+x**.
 
 Now, your new configuration is saved. Finally, restart your network using the following code:
 
 ```
 sudo systemctl restart hostapd
 ```
-It will disconnect you from the LeoRover Wi-Fi, and the Wi-Fi name will be updated as follows:
+It will disconnect you from the LeoRover Network, and the Network ID will be updated as follows:
 
 <p align="center">
     <img title="Updated Wifi Name" src="../Images/LeoOS/WifiImage2.png" width="60%">
 </p>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
-<h2 align="center">Step 6: Connecting via Remote Desktop Connection</h2>
-### Windows ###
+<h2 align="center">Step X: Connecting via Remote Desktop Connection</h2>
 
-With an SSH connection (PuTTY), you have access to a console that allows you to modify your robot's software. Another way to connect to the Raspberry Pi is to use Remote Desktop Connection, which enables you to directly view the desktop of the Raspberry Pi instead of a console. To use Remote Desktop Connection, follow these steps:
-
-<p align="center">
-    <img title="Remote Desktop" src="../Images/LeoOS/RemoteDesktop.png" width="60%">
-</p>
-
-Type your LeoRover's IP address and click 'Connect'.
-
-<p align="center">
-    <img title="Remote Desktop Connection" src="../Images/LeoOS/RemoteDesktopConnect.png" width="60%">
-</p>
-
-Select **Yes** for following alert
-
-<p align="center">
-    <img title="Remote Desktop Warning" src="../Images/LeoOS/RemoteDesktopAlert.png" width="60%">
-</p>
-
-Enter the password and id 
-
-**username:** pi
-
-**password:** raspberry
-
-<p align="center">
-    <img title="Remote Desktop Login" src="../Images/LeoOS/RemoteDesktopLogin.png" width="60%">
-</p>
-
-Now, you should see the desktop of the LeoRover as shown below:
-
-<p align="center">
-    <img title="Raspberry Desktop" src="../Images/LeoOS/LeoRoverDesktop.png" width="60%">
-</p>
-
-You will notice that ROS Jazzy is already installed on the robot.
-
-<p align="center">
-    <img title="ROS Folders" src="../Images/LeoOS/LeoRoverFolders.png" width="60%">
-</p>
-
-Now, you can navigate through the folders to explore what is installed within the LeoRover operating system.
-
-### Linux ###
-
-Run the remmina application
+If you need to access more than the terminal then you need to use remotely connect to the whole desktop. To do this we can use the Remmina application
 
 <p align="center">
     <img title="Open Remmina" src="../Images/LeoOS/remmina_1.png" width="60%">
@@ -218,7 +129,7 @@ Add a new remote using button on left top corner
     <img title="Add Remote" src="../Images/LeoOS/remmina_2.png" width="60%">
 </p>
 
-Type the raspberry pi ip, id and password and then click connect.
+Type the IP address `10.0.0.1`, Username `pi` and password `raspberry` and then click connect.
 
 <p align="center">
     <img title="Connect Raspberry" src="../Images/LeoOS/remmina_3.png" width="60%">
