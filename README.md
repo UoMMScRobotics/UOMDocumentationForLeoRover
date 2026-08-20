@@ -22,4 +22,4 @@ This repository contains documentation for the AERO62520 Robotic System Design P
 
 [Task 10: Grasping](Task10_Grasping)
 
-[Please all see the additional reading](Further_Reading)
+[Please also check out the further reading.](Further_reading)
