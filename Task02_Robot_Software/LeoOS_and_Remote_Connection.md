@@ -175,6 +175,11 @@ You can also send linear and angular velocities to the robot using the **cmd_vel
 > [!WARNING]
 > Please ensure your robot is in the designated operating area or lifted so the wheels are not touching the ground.
 
+
+> [!TIP]
+> You can be creative with boxes to raise the Leo Rover from the ground.
+> <img title="raised_leorover" src="../Images/ROS2/raised_leorover.jpeg" width="80%">
+
 ```
 ros2 topic pub --once /cmd_vel geometry_msgs/msg/Twist "{linear: {x: 1.0, y: 0.0, z: 0.0}, angular: {x: 0.0, y: 0.0, z: 0}}"
 ```
