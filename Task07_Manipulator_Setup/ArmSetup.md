@@ -148,9 +148,6 @@ Once the SD card is flashed re-insert back into the manipulator.
 
 This tutorial sets up a basic peer to peer wired network between the pi and another device (such as your NUC or laptop). This is to get you going, you will need to revise this set up when you consider your system architecture.
 
-> [!WARNING]
-> If previously you've set up up static IP addresses using `99-wired-static.yaml` then remove it using `sudo rm /etc/netplan/99-wired-static.yaml`, then `sudo netplan apply` to apply the change.
-
 The pi will boot into the default user `elephant` which uses the password `trunk`. The pi has a static IP address, `10.3.14.59` (a little π humour).
 
 Check the network on the pi, it should be set up as below.
@@ -192,10 +189,6 @@ fi
 export ROS_DOMAIN_ID=YOUR_GROUP_NUMBER
 echo "ROS_DOMAIN_ID is set to $ROS_DOMAIN_ID"
 
-# ROS_LOCALHOST_ONLY is being fazed out but is good for a quick set up
-export ROS_LOCALHOST_ONLY=0
-echo "ROS_LOCALHOST_ONLY is set to $ROS_LOCALHOST_ONLY"
-
 echo "To change this automation, use nano to edit ~/.bashrc and the source ~/.bashrc to apply."
  ```
  Exit nano (CTRL+X) and save.
@@ -211,15 +204,12 @@ echo "To change this automation, use nano to edit ~/.bashrc and the source ~/.ba
  ros2 launch mycobot_280pi slider_control.launch.py
  ```
 > [!WARNING]
-> Avoid using the `Randomize` button. This interface does not contrain the manipulator. Random joint configurations may cause the arm to attempt to move through the table or other objects.
+> Do not use the `Randomize` button. This interface does not constrain the manipulator. Random joint configurations may cause the arm to attempt to move through the table or other objects.
 ---
 
 
 **Laptop/NUC setup**  
 
-> [!WARNING]
-> If previously you've set up up static IP addresses using `99-wired-static.yaml` then remove it using `sudo rm /etc/netplan/99-wired-static.yaml`, then `sudo netplan apply` to apply the change.
-> 
 Now let's set up your laptop/NUC for our peer to peer wired network. Ensure you have ROS Jazzy installed on the device and you have the ethernet cable plugged into both your device and the raspberry pi. 
 Again we can automate sourcing our ROS workspace by appending instructions to **the end of** the `.bashrc` script.
 Ensure you replace `YOUR_GROUP_NUMBER' with an int value.
@@ -241,9 +231,6 @@ export ROS_DOMAIN_ID=10
 echo "ROS_DOMAIN_ID is set to $ROS_DOMAIN_ID"
 echo "To change this automation, use nano to edit ~/.bashrc and the source ~/.bashrc to apply."
 
-# For quick setup use ROS_LOCALHOST_ONLY, do revise later
-export ROS_LOCALHOST_ONLY=0
-echo "ROS_LOCALHOST_ONLY set to $ROS_LOCALHOST_ONLY"
 ```
  Exit nano (CTRL+X) and save.
 
@@ -268,7 +255,7 @@ Any issues with SSH please see troubleshooting.
 ### Troubleshooting
 
 * General check
-   * In a multi system setup ensure the DDS is being used, check by runing `ros2 doctor --report` on all machines
+   * In a multi system setup ensure the DDS is being used, check by running `ros2 doctor --report` on all machines
 
 * Find out more with verbose 
    ```
@@ -285,7 +272,10 @@ Any issues with SSH please see troubleshooting.
 * Check the device you're trying to SSH from has the SSH client
    ```
    ssh -V
-   #sudo apt install openssh-client #if needed
+    ```
+   If needed
+   ```
+   sudo apt install openssh-client 
    ```
 
 * Check the device you're trying to SSH into has the SSH server
@@ -316,9 +306,8 @@ The world is your oyster! Do not fall into doing nothing in the "abyss of unstru
 Things you need to do that will take longer than you expect:
 * How are you going to trajectories, motion planners, kinematics solvers, collision detection, etc. Using `MoveIt 2` is an option, but others are available.
 * Have you used the gripper and considered how that needs to be set up?
-* What is the bigger networking plan beyond the peer to peer network covered in this tutorial. How do you need to change/expand this network set up to cover your whole system?
+* What is the bigger networking plan beyond connecting just the manipulator to your NUC or laptop?. How do you need to change/expand this network set up to cover your whole system?
    * If you haven't read [Troubleshooting ROS 2 Networking and Communication Guide](https://github.com/UoMMScRobotics/UOMDocumentationForLeoRover/blob/main/Further_reading/Networking.md) now might be a good time.
-* Have you setup simulation so you can work on your project without having physical access to your robot?
-
+* Do you have a simulation setup so you can work on your project without having physical access to your robot?
 
 
