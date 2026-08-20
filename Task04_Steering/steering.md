@@ -564,381 +564,6 @@ LeoRover controller
 Release the button to command zero velocity.
 
 
----
-<h2 align="center">Configure the GUI with ROS 2 Parameters/h2>
-
-t the moment, values such as the driving speed are written directly in our Python code:
-
-```python
-0.2
-0.6
-```
-
-This works, but changing the robot's speed would require editing the program.
-
-ROS 2 provides **parameters** so that settings can be kept separate from the node code.
-
-```text
-GUI node
-   │
-   └── Parameters
-          │
-          ├── linear_speed
-          ├── angular_speed
-          ├── publish_period_ms
-          └── cmd_vel_topic
-```
-
-This is useful because the same program can be configured differently without changing its Python code.
-
-### Create a Configuration Folder
-
-Move to the package:
-
-```bash
-cd ~/ros2_ws/src/gui_controller_leo
-```
-
-Create a configuration directory:
-
-```bash
-mkdir -p config
-```
-
-Create the configuration file:
-
-```bash
-nano config/gui_controller.yaml
-```
-
-Add:
-
-```yaml
-gui_controller:
-  ros__parameters:
-    cmd_vel_topic: cmd_vel
-    linear_speed: 0.2
-    angular_speed: 0.6
-    publish_period_ms: 100
-```
-
-These parameters control:
-
-```text
-linear_speed       → forward/backward speed
-
-angular_speed      → turning speed
-
-publish_period_ms  → how often commands are published
-
-cmd_vel_topic      → velocity command topic
-```
-
----
-
-### Read the Parameters in Python
-
-In `gui_controller.py`, add the parameters near the start of `__init__()`:
-
-```python
-self.declare_parameter('cmd_vel_topic', 'cmd_vel')
-self.declare_parameter('linear_speed', 0.2)
-self.declare_parameter('angular_speed', 0.6)
-self.declare_parameter('publish_period_ms', 100)
-
-self.cmd_vel_topic = self.get_parameter(
-    'cmd_vel_topic'
-).value
-
-self.linear_speed = self.get_parameter(
-    'linear_speed'
-).value
-
-self.angular_speed = self.get_parameter(
-    'angular_speed'
-).value
-
-self.publish_period_ms = self.get_parameter(
-    'publish_period_ms'
-).value
-```
-
-Then create the publisher using the configured topic:
-
-```python
-self.publisher = self.create_publisher(
-    Twist,
-    self.cmd_vel_topic,
-    10
-)
-```
-
-Change the GUI button commands from:
-
-```python
-lambda event: self.set_velocity(0.2, 0.0)
-```
-
-to:
-
-```python
-lambda event: self.set_velocity(
-    self.linear_speed,
-    0.0
-)
-```
-
-For backwards:
-
-```python
-lambda event: self.set_velocity(
-    -self.linear_speed,
-    0.0
-)
-```
-
-For left:
-
-```python
-lambda event: self.set_velocity(
-    0.0,
-    self.angular_speed
-)
-```
-
-For right:
-
-```python
-lambda event: self.set_velocity(
-    0.0,
-    -self.angular_speed
-)
-```
-
-Finally, replace:
-
-```python
-self.root.after(100, self.publish_command)
-```
-
-with:
-
-```python
-self.root.after(
-    self.publish_period_ms,
-    self.publish_command
-)
-```
-
-Do this in both places where `root.after()` is used.
-
-The node's behaviour is now controlled by configuration rather than hard-coded values.
-
-**Install the Configuration File**
-
-OS 2 needs the configuration file to be installed with the package.
-
-Open:
-
-```bash
-cd ~/ros2_ws/src/gui_controller_leo
-nano setup.py
-```
-
-Add these imports near the top:
-
-```python
-import os
-from glob import glob
-```
-
-Your `data_files` should include the package, launch files and configuration files:
-
-```python
-data_files=[
-    (
-        'share/ament_index/resource_index/packages',
-        ['resource/' + package_name]
-    ),
-    (
-        'share/' + package_name,
-        ['package.xml']
-    ),
-    (
-        os.path.join('share', package_name, 'launch'),
-        glob('launch/*.launch.py')
-    ),
-    (
-        os.path.join('share', package_name, 'config'),
-        glob('config/*.yaml')
-    ),
-],
-```
-
-The important idea is:
-
-```text
-Source package
-     │
-     ├── launch/*.launch.py
-     └── config/*.yaml
-              │
-              ▼
-        colcon build
-              │
-              ▼
-install/gui_controller_leo/share/gui_controller_leo/
-     │
-     ├── launch/
-     └── config/
-```
-
-This makes the files available when the installed ROS 2 package is used.
-
----
-
-## Load the Configuration from the Launch File
-
-Now the launch file can load our YAML configuration automatically.
-
-Update:
-
-```bash
-nano launch/gui_controller.launch.py
-```
-
-to:
-
-```python
-import os
-
-from ament_index_python.packages import get_package_share_directory
-from launch import LaunchDescription
-from launch_ros.actions import Node
-
-
-def generate_launch_description():
-
-    package_name = 'gui_controller_leo'
-
-    config_file = os.path.join(
-        get_package_share_directory(package_name),
-        'config',
-        'gui_controller.yaml'
-    )
-
-    gui_controller = Node(
-        package=package_name,
-        executable='gui_controller',
-        name='gui_controller',
-        output='screen',
-        parameters=[config_file]
-    )
-
-    return LaunchDescription([
-        gui_controller
-    ])
-```
-
-Notice:
-
-```python
-parameters=[config_file]
-```
-
-This tells ROS 2 to load the parameters from our YAML file when the node starts.
-
-The complete relationship is now:
-
-```text
-gui_controller.launch.py
-          │
-          ├── starts
-          │
-          ▼
-    GUI Controller Node
-          ▲
-          │ configures
-          │
-gui_controller.yaml
-          │
-          ├── linear_speed
-          ├── angular_speed
-          ├── publish_period_ms
-          └── cmd_vel_topic
-```
-
----
-
-## Build the Updated Package
-
-Return to the workspace:
-
-```bash
-cd ~/ros2_ws
-```
-
-Build:
-
-```bash
-colcon build \
-  --symlink-install \
-  --packages-select gui_controller_leo
-```
-
-Source the workspace:
-
-```bash
-source install/setup.bash
-```
-
-Run:
-
-```bash
-ros2 launch gui_controller_leo gui_controller.launch.py
-```
-
-The launch file now:
-
-```text
-1. Finds the package
-        ↓
-2. Loads gui_controller.yaml
-        ↓
-3. Starts gui_controller
-        ↓
-4. Passes the ROS parameters to the node
-```
-
-Try changing:
-
-```yaml
-linear_speed: 0.2
-```
-
-to:
-
-```yaml
-linear_speed: 0.1
-```
-
-Rebuild and run the launch file again.
-```
-cd ~/ros2_ws
-
-colcon build \
-  --symlink-install \
-  --packages-select gui_controller_leo
-
-source install/setup.bash
-
-ros2 launch gui_controller_leo gui_controller.launch.py
-```
-
-
-The GUI code has not changed, but the rover will now be commanded at a lower speed.
-
-
 
 ---
 <h2 align="center">Using launch files</h2>
@@ -1089,6 +714,377 @@ Now run:
 ros2 launch gui_controller_leo gui_controller.launch.py
 ```
 
+---
+<h2 align="center">Configure the GUI with ROS 2 Parameters</h2>
+
+t the moment, values such as the driving speed are written directly in our Python code:
+
+```python
+0.2
+0.6
+```
+
+This works, but changing the robot's speed would require editing the program.
+
+ROS 2 provides **parameters** so that settings can be kept separate from the node code.
+
+```text
+GUI node
+   │
+   └── Parameters
+          │
+          ├── linear_speed
+          ├── angular_speed
+          ├── publish_period_ms
+          └── cmd_vel_topic
+```
+
+This is useful because the same program can be configured differently without changing its Python code.
+
+### Create a Configuration Folder
+
+Move to the package:
+
+```bash
+cd ~/ros2_ws/src/gui_controller_leo
+```
+
+Create a configuration directory:
+
+```bash
+mkdir -p config
+```
+
+Create the configuration file:
+
+```bash
+nano config/gui_controller.yaml
+```
+
+Add:
+
+```yaml
+gui_controller:
+  ros__parameters:
+    cmd_vel_topic: cmd_vel
+    linear_speed: 0.2
+    angular_speed: 0.6
+    publish_period_ms: 100
+```
+
+These parameters control:
+
+```text
+linear_speed       → forward/backward speed
+
+angular_speed      → turning speed
+
+publish_period_ms  → how often commands are published
+
+cmd_vel_topic      → velocity command topic
+```
+
+
+### Read the Parameters in Python
+
+In `gui_controller.py`, add the parameters near the start of `__init__()`:
+
+```python
+self.declare_parameter('cmd_vel_topic', 'cmd_vel')
+self.declare_parameter('linear_speed', 0.2)
+self.declare_parameter('angular_speed', 0.6)
+self.declare_parameter('publish_period_ms', 100)
+
+self.cmd_vel_topic = self.get_parameter(
+    'cmd_vel_topic'
+).value
+
+self.linear_speed = self.get_parameter(
+    'linear_speed'
+).value
+
+self.angular_speed = self.get_parameter(
+    'angular_speed'
+).value
+
+self.publish_period_ms = self.get_parameter(
+    'publish_period_ms'
+).value
+```
+
+Then create the publisher using the configured topic:
+
+```python
+self.publisher = self.create_publisher(
+    Twist,
+    self.cmd_vel_topic,
+    10
+)
+```
+
+Change the GUI button commands from:
+
+```python
+lambda event: self.set_velocity(0.2, 0.0)
+```
+
+to:
+
+```python
+lambda event: self.set_velocity(
+    self.linear_speed,
+    0.0
+)
+```
+
+For backwards:
+
+```python
+lambda event: self.set_velocity(
+    -self.linear_speed,
+    0.0
+)
+```
+
+For left:
+
+```python
+lambda event: self.set_velocity(
+    0.0,
+    self.angular_speed
+)
+```
+
+For right:
+
+```python
+lambda event: self.set_velocity(
+    0.0,
+    -self.angular_speed
+)
+```
+
+Finally, replace:
+
+```python
+self.root.after(100, self.publish_command)
+```
+
+with:
+
+```python
+self.root.after(
+    self.publish_period_ms,
+    self.publish_command
+)
+```
+
+Do this in both places where `root.after()` is used.
+
+The node's behaviour is now controlled by configuration rather than hard-coded values.
+
+**Install the Configuration File**
+
+ROS 2 needs the configuration file to be installed with the package.
+
+Open:
+
+```bash
+cd ~/ros2_ws/src/gui_controller_leo
+nano setup.py
+```
+
+Add these imports near the top:
+
+```python
+import os
+from glob import glob
+```
+
+Your `data_files` should include the package, launch files and configuration files:
+
+```python
+data_files=[
+    (
+        'share/ament_index/resource_index/packages',
+        ['resource/' + package_name]
+    ),
+    (
+        'share/' + package_name,
+        ['package.xml']
+    ),
+    (
+        os.path.join('share', package_name, 'launch'),
+        glob('launch/*.launch.py')
+    ),
+    (
+        os.path.join('share', package_name, 'config'),
+        glob('config/*.yaml')
+    ),
+],
+```
+
+The important idea is:
+
+```text
+Source package
+     │
+     ├── launch/*.launch.py
+     └── config/*.yaml
+              │
+              ▼
+        colcon build
+              │
+              ▼
+install/gui_controller_leo/share/gui_controller_leo/
+     │
+     ├── launch/
+     └── config/
+```
+
+This makes the files available when the installed ROS 2 package is used.
+
+
+## Load the Configuration from the Launch File
+
+Now the launch file can load our YAML configuration automatically.
+
+Update:
+
+```bash
+nano launch/gui_controller.launch.py
+```
+
+to:
+
+```python
+import os
+
+from ament_index_python.packages import get_package_share_directory
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+
+def generate_launch_description():
+
+    package_name = 'gui_controller_leo'
+
+    config_file = os.path.join(
+        get_package_share_directory(package_name),
+        'config',
+        'gui_controller.yaml'
+    )
+
+    gui_controller = Node(
+        package=package_name,
+        executable='gui_controller',
+        name='gui_controller',
+        output='screen',
+        parameters=[config_file]
+    )
+
+    return LaunchDescription([
+        gui_controller
+    ])
+```
+
+Notice:
+
+```python
+parameters=[config_file]
+```
+
+This tells ROS 2 to load the parameters from our YAML file when the node starts.
+
+The complete relationship is now:
+
+```text
+gui_controller.launch.py
+          │
+          ├── starts
+          │
+          ▼
+    GUI Controller Node
+          ▲
+          │ configures
+          │
+gui_controller.yaml
+          │
+          ├── linear_speed
+          ├── angular_speed
+          ├── publish_period_ms
+          └── cmd_vel_topic
+```
+
+## Build the Updated Package
+
+Return to the workspace:
+
+```bash
+cd ~/ros2_ws
+```
+
+Build:
+
+```bash
+colcon build \
+  --symlink-install \
+  --packages-select gui_controller_leo
+```
+
+Source the workspace:
+
+```bash
+source install/setup.bash
+```
+
+Run:
+
+```bash
+ros2 launch gui_controller_leo gui_controller.launch.py
+```
+
+The launch file now:
+
+```text
+1. Finds the package
+        ↓
+2. Loads gui_controller.yaml
+        ↓
+3. Starts gui_controller
+        ↓
+4. Passes the ROS parameters to the node
+```
+
+Try changing:
+
+```yaml
+linear_speed: 0.2
+```
+
+to:
+
+```yaml
+linear_speed: 0.1
+```
+
+Rebuild and run the launch file again.
+```
+cd ~/ros2_ws
+
+colcon build \
+  --symlink-install \
+  --packages-select gui_controller_leo
+
+source install/setup.bash
+
+ros2 launch gui_controller_leo gui_controller.launch.py
+```
+
+
+The GUI code has not changed, but the rover will now be commanded at a lower speed.
+
+
 
 ---
 <h2 align="center">Summary</h2>
@@ -1123,255 +1119,34 @@ In this section you created your own ROS 2 system component:
 Also useful to remember:
 
 ```text
-package.xml     → declares ROS package dependencies
+package.xml
+    → declares package metadata and dependencies
 
-setup.py        → installs the Python executable and launch files
+setup.py
+    → installs Python executables and package resources
 
-rosdep          → installs package dependencies
+config/*.yaml
+    → configures node parameters
 
-colcon          → builds the workspace
+launch/*.launch.py
+    → describes how nodes are started and configured
 
-ros2 run        → starts an executable
+rosdep
+    → installs declared dependencies
 
-ros2 launch     → starts and configures a ROS system
-
-DDS             → allows ROS nodes to communicate across the network
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
----
-<h2 align="center">Step 1: Creating ROS2 Workspace</h2>
-
-First, create a new package
-```
-cd ~/ros2_ws/src
-ros2 pkg create leo_joy_example --build-type ament_python --dependencies joy teleop_twist_joy
-```
-
-Update workspace
-
-```
-cd ~/ros2_ws
-rosdep update
-rosdep install --from-paths src -i
-```
-
-Create launch folder
-
-```
-cd src/leo_joy_example
-mkdir launch
-```
-
-Create launch file
-
-```
-cd launch
-nano joy.launch.py
-```
-
-Copy the following code into `joy.launch.py` file:
-
-```python
-from launch import LaunchDescription
-from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
-import os
-
-def generate_launch_description():
-  ld = LaunchDescription()
-
-  package_name = 'leo_joy_example'
-  joy_config_path = os.path.join(
-    get_package_share_directory(package_name),
-    'config',
-    'joy_mapping.yaml'
-  )
-
-  # Joy node
-  joy_node = Node(
-    package='joy',
-    executable='joy_node',
-    name='joy_node',
-    output='screen',
-    parameters=[{
-      'dev': '/dev/input/js0',
-      'coalesce_interval': 0.02,
-      'autorepeat_rate': 30.0
-    }]
-  )
-
-  # Teleop node
-  teleop_node = Node(
-    package='teleop_twist_joy',
-    executable='teleop_node',
-    name='teleop_node',
-    output='screen',
-    parameters=[joy_config_path],
-    remappings=[('cmd_vel', 'cmd_vel')]
-  )
-
-  # Add nodes to the launch description
-  ld.add_action(joy_node)
-  ld.add_action(teleop_node)
-
-  return ld
-
-```
-press **Ctrl+O** , **Enter**, **Ctrl+X**
-
-Modify your `setup.py` file at `~/ros2_ws/src/leo_joy_example`:
-```python
-from setuptools import find_packages, setup
-import os
-from glob import glob
-
-package_name = 'leo_joy_example'
-
-setup(
-  name=package_name,
-  version='0.0.0',
-  packages=find_packages(exclude=['test']),
-  data_files=[
-    ('share/ament_index/resource_index/packages',
-      ['resource/' + package_name]),
-    ('share/' + package_name, ['package.xml']),
-    (os.path.join('share', package_name, 'launch'), glob(os.path.join('launch', '*launch.[pxy][yma]*'))),
-  ],
-  install_requires=['setuptools'],
-  zip_safe=True,
-  maintainer='pi',
-  maintainer_email='pi@todo.todo',
-  description='TODO: Package description',
-  license='TODO: License declaration',
-  tests_require=['pytest'],
-  entry_points={
-    'console_scripts': [
-    ],
-  },
-)
-```
-
-Create configuration folder
-```
-cd ~/ros2_ws/src/leo_joy_example
-mkdir config
-```
-
-Create configuration file
-```
-cd config
-nano joy_mapping.yaml
-```
-
-Copy the following configurations into  **joy_mapping.yaml** file:
-
-```
-axis_linear: 1
-scale_linear: 0.4
-axis_angular: 3
-scale_angular: 2.0
-enable_button: 5
-```
-press **Ctrl+o** , **Enter**, **Ctrl+x**
-
-Finally, build the workspace
-
-```
-cd ~/ros2_ws
 colcon build
+    → builds and installs the workspace
+
+ros2 run
+    → starts an executable
+
+ros2 launch
+    → starts a launch description
+
+DDS
+    → transports ROS 2 communication across the network
 ```
 
----
-<h2 align="center">Step 2: Bluetooth Connection</h2>
-
-To establish a Bluetooth connection between the PS4 controller and the Raspberry Pi, right-click on the Bluetooth icon in the bottom right corner and click **Devices**.
-
-<p align="center">
-  <img src="../Images/JoyStick/Bluetooth.png" title="Devices" width="30%"/>
-</p>
-
-Press the PS and Share buttons on the PS4 controller simultaneously until the LED starts blinking. See the buttons below:
-
-<p align="center">
-  <img src="../Images/JoyStick/PS4.png" title="PS4 Buttons" width="40%"/>
-</p>
-
-Then search for devices. It will find <b>Wireless Controller</b>.
-
-<p align="center">
-  <img src="../Images/JoyStick/FindController.png" title="Find Controller" width="40%"/>
-</p>
-
-Right click on <b>Wireless Device</b>, click <b>Pair</b> and <b>Trust</b> in order.
-
-<p align="center">
-  <img src="../Images/JoyStick/Pair.png" title="Pair and Trust" width="40%"/>
-</p>
-
-When your controller's LED stops blinking and becomes a stable colour, it is connected to the Raspberry Pi and added as a trusted device. Now you should see the following:
-
-<p align="center">
-  <img src="../Images/JoyStick/Connected.png" title="PS4 Connected" width="40%"/>
-</p>
-
-Disconnect the controller and reconnect it, it should push a notification to connect, once this is done, the controller LED should turn blue.
-
----
-<h2 align="center">Step 3: Running ROS2 Nodes</h2>
-
-First, open two terminal windows and source the workspace in both terminals.
-```
-cd ~/ros2_ws
-```
-<p align="center">
-  <img src="../Images/JoyStick/TwoTerminals.png" alt="Terminals" width="80%"/>
-</p>
-
-Type the following command in one of the terminals to run the ROS joystick node `joy_node`:
-
-```
-ros2 run joy joy_node
-```
-
-<p align="center">
-  <img src="../Images/JoyStick/Connection.png" alt="Succeed Connection" width="50%"/>
-</p>
-
-Now, listen to the **/joy** topic in the second terminal:
-
-```
-ros2 topic echo /joy
-```
-
-You will notice that as you press buttons on your controller, data will be published via **/joy** as follows:
-
-<p align="center">
-  <img src="../Images/JoyStick/Axis.png" alt="Joy Axis" width="40%"/>
-</p>
-
-First, investigate the relationship between buttons and axes. Then, check the configuration file **joy_mapping.yaml** that you created earlier to understand the functions of the PS4 buttons.
-
-Now, launch the package that you created in the previous steps to control the LeoRover:
-
-```
-ros2 launch leo_joy_example joy.launch.py
-```
-
-<p align="center">
-  <img src="../Images/JoyStick/DriveLeo.png" alt="Drive Leo" width="40%"/>
-</p>
-
-You can open the camera broadcast on your computer to monitor your robot while driving by connecting to **10.0.0.1** via your browser.
+> [!TIP]
+> You can open the camera broadcast on your laptop but searching **10.0.0.1** in your browser.
 
