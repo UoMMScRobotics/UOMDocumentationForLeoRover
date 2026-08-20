@@ -145,20 +145,138 @@ Once the SD card is flashed re-insert back into the manipulator.
 ---
 
 ### First Boot Steps
+## You will need a monitor and peripherals for the first time only.
 
-This tutorial sets up a basic peer to peer wired network between the pi and another device (such as your NUC or laptop). This is to get you going, you will need to revise this set up when you consider your system architecture.
 
-The pi will boot into the default user `elephant` which uses the password `trunk`. The pi has a static IP address, `10.3.14.59` (a little π humour).
+This tutorial sets up a basic wired network between the pi and another device (such as your NUC or laptop). This is to get you going, you will need to revise this set up when you consider your system architecture.
 
-Check the network on the pi, it should be set up as below.
-<p align="center">
-    <img title="Network" src="https://github.com/UoMMScRobotics/maniupulator-jazzy/blob/4d775245b05734a16eab930f339125fcebc825c5/Images/Network.png" width="60%"/>
-</p>
-<p align="center">
-    <img title="Network" src="https://github.com/UoMMScRobotics/maniupulator-jazzy/blob/4d775245b05734a16eab930f339125fcebc825c5/Images/Network_mani_pi.png" width="60%"/>
-</p>
+Our aim is to set up:
 
-**ROS2 Environment Setup on the pi:**  
+```text
+                 ROBOT MANIPULATOR
+              Ubuntu 24.04 / ROS 2 Jazzy
+
+Laptop                       Raspberry Pi
+┌────────────────┐          ┌─────────────────┐
+│ Ethernet       │          │ eth0            │
+│ 10.3.14.60/24  │──────────│ 10.3.14.59/24  │
+└────────────────┘          └─────────────────┘
+                                    │
+                              SSH 10.3.14.59
+
+The pi will boot into the default user `elephant` which uses the password `trunk`. 
+
+Let us set up the network
+
+List all Netplan configuration:
+
+```bash
+ls -l /etc/netplan/
+```
+
+Then inspect **all** YAML files:
+
+```bash
+sudo cat /etc/netplan/*.yaml
+```
+
+This is important because Netplan reads configuration from multiple YAML files and merges them.
+
+For example, we originally had:
+
+```text
+/etc/netplan/
+├── 50-cloud-init.yaml
+└── 90-NM-....yaml
+```
+
+One configuration said:
+
+```yaml
+dhcp4: true
+```
+
+while another assigned:
+
+```yaml
+addresses:
+  - 10.3.14.59/24
+```
+
+That means two files were trying to describe the same `eth0` interface differently.
+
+For an embedded robot, avoid this where possible. The Ethernet configuration should have **one clear source of truth**.
+
+If there is an additional NetworkManager-generated Netplan file defining `eth0`, such as:
+
+```text
+90-NM-xxxxxxxx.yaml
+```
+
+and `50-cloud-init.yaml` is going to become the authoritative Ethernet configuration, remove the conflicting file:
+
+```bash
+sudo rm /etc/netplan/90-NM-xxxxxxxx.yaml
+```
+
+onfigure the static Ethernet address
+
+Edit:
+
+```bash
+sudo nano /etc/netplan/50-cloud-init.yaml
+```
+
+Use:
+
+```yaml
+network:
+  version: 2
+  renderer: NetworkManager
+  ethernets:
+    eth0:
+      addresses:
+        - 10.3.14.59/24
+      dhcp4: false
+      dhcp6: false
+```
+
+Save and exit.
+
+Prevent cloud-init rewriting networking
+
+Because the configuration file is named `50-cloud-init.yaml`, prevent cloud-init from regenerating network configuration:
+
+```bash
+sudo mkdir -p /etc/cloud/cloud.cfg.d
+```
+
+Then:
+
+```bash
+echo 'network: {config: disabled}' | \
+sudo tee /etc/cloud/cloud.cfg.d/99-disable-network-config.cfg
+```
+
+This does not disable cloud-init entirely. It prevents cloud-init from managing the network configuration.
+
+validate
+
+```bash
+sudo netplan generate
+```
+```bash
+sudo netplan apply
+```
+When we reboot the changes will persist 
+```bash
+sudo reboot
+```
+
+Everytime the mycobot boots the ethernet port will have the IP address, `10.3.14.59` (a little π humour).
+
+While we still have pheriphrals handy let's set up the **ROS2 Environment Setup on the pi:** 
+
 We can automate sourcing our ROS workspace by appending instructions to **the end of** the `.bashrc` script.
 
  ```
@@ -205,12 +323,27 @@ echo "To change this automation, use nano to edit ~/.bashrc and the source ~/.ba
  ```
 > [!WARNING]
 > Do not use the `Randomize` button. This interface does not constrain the manipulator. Random joint configurations may cause the arm to attempt to move through the table or other objects.
----
+
+Next we're going to set up our laptop or NUC so we next have to use a monitor or any extra peripherals when developing the mycobot.
+
+
 
 
 **Laptop/NUC setup**  
 
 Now let's set up your laptop/NUC for our peer to peer wired network. Ensure you have ROS Jazzy installed on the device and you have the ethernet cable plugged into both your device and the raspberry pi. 
+
+Give the laptop's Ethernet interface a manual IPv4 configuration, so it's on the same subnet as the mycobott:
+
+```text
+IPv4 address:  10.3.14.60
+Netmask:       255.255.255.0
+Prefix:        /24
+Gateway:       blank
+DNS:           blank
+```
+
+
 Again we can automate sourcing our ROS workspace by appending instructions to **the end of** the `.bashrc` script.
 Ensure you replace `YOUR_GROUP_NUMBER' with an int value.
 ```
@@ -241,7 +374,7 @@ echo "To change this automation, use nano to edit ~/.bashrc and the source ~/.ba
 
 **Test the set up**
 
-On the raspberry pi run: `ros2 launch mycobot_280pi slider_control.launch.py`. Leave that running and turn your attention to your other device and run: `ros2 topic list`. You should be able to see the topics running on your arm from your NUC/Laptop.
+On the raspberry pi run: `ros2 launch mycobot_280pi slider_control.launch.py` (you can perhaps automate any nodes launching with launch files and the bashrc). Leave that running and turn your attention to your other device and run: `ros2 topic list`. You should be able to see the topics running on your arm from your NUC/Laptop.
 
 **Remote Access**
 
@@ -251,6 +384,10 @@ ssh elephant@10.3.14.59
 ```
 The password being `trunk`.
 Any issues with SSH please see troubleshooting.
+
+
+
+
 
 ### Troubleshooting
 
