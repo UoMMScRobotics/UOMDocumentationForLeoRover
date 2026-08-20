@@ -4,24 +4,9 @@ This repository contains documentation for the AERO62520 Robotic System Design P
 
 [Task 1: Important Considerations During Assembly](Task01_Assembly)
 
-
-This section provides essential points to consider during the assembly process.
-
 [Task 2: LeoOS System Installation and Configuration](Task02_Robot_Software)
 
-
-<ol>
-<li>Install LeoOS System on the Raspberry Pi</li>
-<li>Changing the WiFi ID</li>
-<li>Connecting to the Internet</li>
-<li>Remote Connection to Raspberry Pi</li>
-<li>Updating System and Firmware</li>
-<li>Testing ROS Installation</li>
-</ol>
-
 [Task 3: ROS Workspace and Packages Creation](Task03_Basic_ROS)
-
-This section explains how to create a ROS workspace and packages, including a simple ROS node for moving the robot forward and backward periodically.
 
 [Task 4: Steering LeoRover with a GUI Controller](Task04_Steering)
 
