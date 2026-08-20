@@ -23,7 +23,7 @@ This section provides essential points to consider during the assembly process.
 
 This section explains how to create a ROS workspace and packages, including a simple ROS node for moving the robot forward and backward periodically.
 
-[Task 4: Steering LeoRover with a PS4 Controller](Task04_Steering_with_joystick)
+[Task 4: Steering LeoRover with a GUI Controller](Task04_Steering)
 
 [Task 5: Installing Ubuntu 24.04 Image and ROS2 on Intel NUC](Task05_Intel_NUC_Setup)
 
