@@ -273,6 +273,9 @@ When we reboot the changes will persist
 sudo reboot
 ```
 
+> [!NOTE]
+> Before the reboot add steps so can remote access via VNC
+
 Everytime the mycobot boots the ethernet port will have the IP address, `10.3.14.59` (a little π humour).
 
 While we still have pheriphrals handy let's set up the **ROS2 Environment Setup on the pi:** 
