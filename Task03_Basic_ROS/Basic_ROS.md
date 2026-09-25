@@ -1,6 +1,6 @@
 ## ROS 2 Fundamentals with the LeoRover Simulator
 
-In this guide, you will learn the basic structure of a ROS 2 system by installing and exploring the LeoRover simulator, No physical robot is required. Everything runs on your laptop
+In this guide, you will learn the basic structure of a ROS 2 system by installing and exploring the LeoRover simulator, No physical robot is required. Everything runs on your laptop.
 
 By the end, you should understand:
 
@@ -15,6 +15,109 @@ Topic
     ↓
 Message
 ```
+
+<h2 align="center">Installing ROS2 Jazzy on your laptop</h2>
+
+### Set Locale ###
+```
+locale  # check for UTF-8
+
+sudo apt update && sudo apt install locales
+sudo locale-gen en_US en_US.UTF-8
+sudo update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
+
+locale  # verify settings
+```
+### Setup Sources ###
+
+```
+sudo apt install software-properties-common
+sudo add-apt-repository universe
+```
+
+```
+sudo apt update && sudo apt install curl -y
+export ROS_APT_SOURCE_VERSION=$(curl -s https://api.github.com/repos/ros-infrastructure/ros-apt-source/releases/latest | grep -F "tag_name" | awk -F\" '{print $4}')
+```
+
+```
+curl -L -o /tmp/ros2-apt-source.deb "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.$(. /etc/os-release && echo $VERSION_CODENAME)_all.deb" # If using Ubuntu derivates use $UBUNTU_CODENAME
+sudo dpkg -i /tmp/ros2-apt-source.deb
+```
+### Install ROS 2 packages ###
+
+```
+sudo apt update
+```
+```
+sudo apt upgrade
+```
+```
+sudo apt install ros-jazzy-desktop
+```
+```
+sudo apt install ros-dev-tools
+```
+
+To test your installation, please open two terminal windows and source your ROS2 workspace in both of them:
+
+```
+source /opt/ros/jazzy/setup.bash
+```
+
+In one of the terminals, run a data publisher node:
+```
+ros2 run demo_nodes_cpp talker
+```
+In the other terminal, run a data listener node:
+
+```
+ros2 run demo_nodes_py listener
+```
+
+You should see the following output:
+
+<img title="ROS2_Test"  src="../Images/ROS2/ros2_test2.png"  width=80% height=auto>
+
+
+### Automating sourcing your workspace(s)
+
+To automatically source the ROS2 workspace, you need to edit `~/.bashrc`. `~/.bashrc` is a hidden configuration script in your home directory that the Bash shell runs automatically every time you open a new interactive terminal session. You can edit it by:
+```
+nano ~/.bashrc
+```
+Reminder: [nano keyboard shortcuts](https://www.nano-editor.org/dist/latest/cheatsheet.html)
+
+Add to the end of bashrc:
+
+```
+# Source ROS Jazzy setup with error checking
+if source /opt/ros/jazzy/setup.bash; then
+  echo "Sourced /opt/ros/jazzy/setup.bash successfully"
+else
+  echo "Failed to source /opt/ros/jazzy/setup.bash"
+fi
+
+
+# You can also set ROS environment variables 
+export RMW_IMPLEMENTATION=rmw_fastrtps_cpp
+echo "ROS Middleware set to $RMW_IMPLEMENTATION"
+```
+
+Then
+
+```
+source ~/.bashrc
+```
+You should see the echo output as you open a new terminal.
+
+> [!IMPORTANT]
+> Highly recommend automating sourcing of your ROS2 workspace! Adding echo to describe what is happening is incredibly useful in a team project.
+
+
+[The ROS2 Jazzy installation docs.](https://docs.ros.org/en/jazzy/Installation.html)
+
 
 ---
 <h2 align="center">Step 1: Understanding ROS 2 Structure</h2>
