@@ -1,9 +1,5 @@
 # myCobot 280 Pi Documentation
 
-> [!CAUTION]
-> If you are looking for the first iteration for this documentation that uses Galatic and Humble please '[click here](https://github.com/UoMMScRobotics/MSc-manipulator-task)' to be redirected.
->
-
 ## Table of Contents
 1. [Key Specifications](#key-specifications)
 2. [Performance & Structural Parameters](#performance--structural-parameters)
