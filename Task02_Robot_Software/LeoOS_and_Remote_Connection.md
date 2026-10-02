@@ -137,27 +137,6 @@ Enter your student information and connect.
 > ```
 > timedatectl status
 > ```
->
-> Confirm that the output shows:
->
-> ```text
-> System clock synchronized: yes
-> NTP service: active
-> ```
->
-> If NTP is not enabled, run:
->
-> ```
-> sudo timedatectl set-ntp true
-> ```
->
-> Then check the status again:
->
-> ```
-> timedatectl status
-> ```
->
-> An incorrect system clock can cause HTTPS certificate verification errors when running `apt update`.
 
 Check for and install update to the packages on your system. The -y flag automatically installs without prompting for confirmation. 
 
