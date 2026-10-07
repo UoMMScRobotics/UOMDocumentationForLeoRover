@@ -76,7 +76,7 @@ Every T-nut should be rotated in a manner that allows it to securely catch the g
 
 ### Battery Button
 
-When you unpack the battery box, you may encounter two possible types of battery buttons. The instructions for cable connections for both types of buttons are provided in the instructions. Be sure to identify the instructions that match your specific type of button, and ensure that you connect the cables into the correct pins as specified.
+Batteries are premade and stored in the metal container between sessions.
 
 ---
 
